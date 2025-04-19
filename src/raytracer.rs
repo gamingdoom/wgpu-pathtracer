@@ -22,7 +22,7 @@ pub struct Raytracer<'a> {
 
 impl<'a> Raytracer<'a> {
     pub fn new(wgpu_state: wgpu_util::WGPUState<'a>) -> Raytracer<'a> {
-        let mut camera = camera::Camera::new(
+        let camera = camera::Camera::new(
             wgpu_state.window().inner_size(),
             60.0,
             Vec3::new(0.0, 0.0, 0.0),
