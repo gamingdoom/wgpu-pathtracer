@@ -1,0 +1,6 @@
+Use:
+//!<whatever>
+To invoke the preprocessor. The preprocessor uses c syntax.
+
+Command (prints preprocessed code):
+cat whatever.wgsl | sed 's/\/\/!//g' - | cpp -P -
