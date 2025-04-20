@@ -30,7 +30,9 @@ impl<'a> Raytracer<'a> {
 
         let mut scene = scene::Scene::new(&wgpu_state, camera);
 
-        scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
+        scene.load_obj(&wgpu_state, "res/minecraft/minecraft.obj");
+        //scene.load_obj(&wgpu_state, "res/sports_car/sportsCar.obj");
+        //scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
         //scene.load_obj(&wgpu_state, "res/living_room/living_room.obj");
         //scene.load_obj(&wgpu_state, "res/fireplace_room/fireplace_room.obj");
         //scene.load_obj(&wgpu_state, "res/cornell_box_pbr.obj");

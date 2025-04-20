@@ -247,7 +247,7 @@ fn specular_probability(
 
     // TODO ???
     //return fresnel;
-    return fresnel / (fresnel + (diffuse_reflectance * (1.0 - fresnel)));
+    return clamp(fresnel / (fresnel + (diffuse_reflectance * (1.0 - fresnel))), 0.1, 0.9);
     //return f_schlick / (f_schlick + (diffuse_reflectance * (1.0 - f_schlick)));
 }
 

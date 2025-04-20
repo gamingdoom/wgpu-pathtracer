@@ -1,0 +1,837 @@
+# Blender 4.4.0 MTL File: 'test.blend'
+# www.blender.org
+
+newmtl MWO_chest_front
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/MWO_chest_front.png
+
+newmtl MWO_chest_latch
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/MWO_chest_latch.png
+
+newmtl MWO_chest_side
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/MWO_chest_side.png
+
+newmtl MWO_chest_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/MWO_chest_top.png
+
+newmtl amethyst_block
+Ks 0.160000 0.160000 0.160000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/amethyst_block.png
+
+newmtl amethyst_cluster
+Ks 0.160000 0.160000 0.160000
+Ni 1.450000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/amethyst_cluster.png
+map_Ke /home/pranay/blender/minecraft/tex/amethyst_cluster.png
+map_d /home/pranay/blender/minecraft/tex/amethyst_cluster.png
+
+newmtl andesite
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/andesite.png
+
+newmtl brown_mushroom
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/brown_mushroom.png
+map_Ke /home/pranay/blender/minecraft/tex/brown_mushroom.png
+map_d /home/pranay/blender/minecraft/tex/brown_mushroom.png
+
+newmtl budding_amethyst
+Ks 0.160000 0.160000 0.160000
+Ni 1.450000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/budding_amethyst.png
+map_Ke /home/pranay/blender/minecraft/tex/budding_amethyst.png
+map_d /home/pranay/blender/minecraft/tex/budding_amethyst.png
+
+newmtl calcite
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/calcite.png
+
+newmtl clay
+Ks 0.110000 0.110000 0.110000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Pr 0.625500
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/clay.png
+
+newmtl coal_ore
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/coal_ore.png
+
+newmtl cobweb
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/cobweb.png
+map_d /home/pranay/blender/minecraft/tex/cobweb.png
+
+newmtl copper_ore
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/copper_ore.png
+
+newmtl diorite
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/diorite.png
+
+newmtl dirt.001
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/dirt.png
+
+newmtl fern
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/fern_y.png
+map_d /home/pranay/blender/minecraft/tex/fern_y.png
+
+newmtl glow_lichen
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/glow_lichen.png
+map_Ke /home/pranay/blender/minecraft/tex/glow_lichen.png
+map_d /home/pranay/blender/minecraft/tex/glow_lichen.png
+
+newmtl gold_ore
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/gold_ore.png
+
+newmtl granite
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/granite.png
+
+newmtl grass
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/grass_y.png
+map_d /home/pranay/blender/minecraft/tex/grass_y.png
+
+newmtl grass_block_side.001
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/grass_block_side_y.png
+
+newmtl grass_block_top.001
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/grass_block_top_y.png
+
+newmtl gravel
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/gravel.png
+
+newmtl iron_ore
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/iron_ore.png
+
+newmtl kelp
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/kelp.png
+map_d /home/pranay/blender/minecraft/tex/kelp.png
+
+newmtl kelp_plant
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/kelp_plant.png
+map_d /home/pranay/blender/minecraft/tex/kelp_plant.png
+
+newmtl lapis_ore
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/lapis_ore.png
+
+newmtl large_amethyst_bud
+Ks 0.160000 0.160000 0.160000
+Ni 1.450000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/large_amethyst_bud.png
+map_Ke /home/pranay/blender/minecraft/tex/large_amethyst_bud.png
+map_d /home/pranay/blender/minecraft/tex/large_amethyst_bud.png
+
+newmtl large_fern_bottom
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/large_fern_bottom_y.png
+map_d /home/pranay/blender/minecraft/tex/large_fern_bottom_y.png
+
+newmtl large_fern_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/large_fern_top_y.png
+map_d /home/pranay/blender/minecraft/tex/large_fern_top_y.png
+
+newmtl lava_flow
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/lava_flow.png
+map_Ke /home/pranay/blender/minecraft/tex/lava_flow.png
+
+newmtl lava_still
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/lava_still.png
+map_Ke /home/pranay/blender/minecraft/tex/lava_still.png
+
+newmtl magma
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/magma.png
+map_Ke /home/pranay/blender/minecraft/tex/magma.png
+
+newmtl medium_amethyst_bud
+Ks 0.160000 0.160000 0.160000
+Ni 1.450000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/medium_amethyst_bud.png
+map_Ke /home/pranay/blender/minecraft/tex/medium_amethyst_bud.png
+map_d /home/pranay/blender/minecraft/tex/medium_amethyst_bud.png
+
+newmtl oak_log_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/oak_log_top.png
+
+newmtl oak_planks
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Pr 0.642929
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/oak_planks.png
+
+newmtl rail
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/rail.png
+map_d /home/pranay/blender/minecraft/tex/rail.png
+
+newmtl raw_copper_block
+Ks 0.160000 0.160000 0.160000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/raw_copper_block.png
+
+newmtl rooted_dirt
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/rooted_dirt.png
+
+newmtl sand
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/sand.png
+
+newmtl sandstone
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/sandstone.png
+
+newmtl sandstone_bottom
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/sandstone_bottom.png
+
+newmtl sandstone_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/sandstone_top.png
+
+newmtl small_amethyst_bud
+Ks 0.160000 0.160000 0.160000
+Ni 1.450000
+illum 2
+Pr 0.548336
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/small_amethyst_bud.png
+map_Ke /home/pranay/blender/minecraft/tex/small_amethyst_bud.png
+map_d /home/pranay/blender/minecraft/tex/small_amethyst_bud.png
+
+newmtl smooth_basalt
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Pr 0.642929
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/smooth_basalt.png
+
+newmtl spawner
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/spawner.png
+map_d /home/pranay/blender/minecraft/tex/spawner.png
+
+newmtl spruce_leaves
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/spruce_leaves_y.png
+map_d /home/pranay/blender/minecraft/tex/spruce_leaves_y.png
+
+newmtl spruce_log
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/spruce_log.png
+
+newmtl spruce_log_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/spruce_log_top.png
+
+newmtl stone.001
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/stone.png
+
+newmtl sugar_cane
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/sugar_cane.png
+map_d /home/pranay/blender/minecraft/tex/sugar_cane.png
+
+newmtl tall_seagrass_bottom
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/tall_seagrass_bottom.png
+map_d /home/pranay/blender/minecraft/tex/tall_seagrass_bottom.png
+
+newmtl tall_seagrass_top
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/tall_seagrass_top.png
+map_d /home/pranay/blender/minecraft/tex/tall_seagrass_top.png
+
+newmtl torch
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+Pr 1.000000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd /home/pranay/blender/minecraft/tex/torch.png
+map_Ke /home/pranay/blender/minecraft/tex/torch.png
+map_d /home/pranay/blender/minecraft/tex/torch.png
+
+newmtl water_still
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
+Pr 0.534436
+Pm 0.200000

@@ -18,7 +18,8 @@ struct RayIntersectionCustom {
     //hit_vertex_positions:  array<vec3<f32>, 3>,
     vertices: array<Vertex, 3>,
     material: SampledMaterial,
-    hit_light: bool
+    hit_light: bool,
+    uvw: vec3<f32>,
     //rq: ptr<private, ray_query>
 }
 
@@ -89,6 +90,7 @@ fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
         verts,
         material,
         hit_light,
+        vec3<f32>(w, rq_intersection.barycentrics.x, rq_intersection.barycentrics.y),
         //&rq
     );
 
@@ -229,7 +231,7 @@ fn scatter(ro: vec3<f32>, rd: vec3<f32>, intersection: RayIntersectionCustom) ->
 
     //var n = normalize(cross(v1 - v0, v2 - v0));
     
-    var n = normalize(v0.normal);
+    var n = normalize((v0.normal * intersection.uvw.x + v1.normal * intersection.uvw.y + v2.normal * intersection.uvw.z));
     //n = faceForward(-n, n, rd);
     if dot(n, -rd) < 0.0 {
         n *= -1.0;
