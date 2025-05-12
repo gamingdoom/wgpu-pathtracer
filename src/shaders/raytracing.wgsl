@@ -449,7 +449,8 @@ fn pixel_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<
 
     color.w = 1.0;
 
-    color = vec4<f32>(sqrt(color.rgb), 1.0);
+    //color = vec4<f32>(sqrt(color.rgb), 1.0);
+    //color = vec4<f32>(color.rgb * color.rgb, 1.0);
     
     return color;
 }

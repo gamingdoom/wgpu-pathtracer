@@ -340,6 +340,7 @@ fn prep_data(
 
     data.material = material;
     data.alpha_x = material.roughness * material.roughness;
+    //data.alpha_x = material.roughness;
     data.alpha_y = data.alpha_x;
     
     data.diffuse_reflectance = material.albedo * (1.0 - material.metallic);
@@ -407,6 +408,7 @@ fn disney_brdf(
 
         //pdf = ggx_sample_pdf(material.roughness * material.roughness, normal, h, v);
         pdf = ggx_sample_pdf(data);
+        //pdf = 1.0;
     }
     
     //color *= dot(v, normal);
