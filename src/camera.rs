@@ -3,6 +3,7 @@ use winit::dpi::PhysicalSize;
 
 use crate::shaders::shader_definitions;
 
+#[derive(Debug, Copy, Clone)]
 pub struct Camera {
     pub width: u32,
     pub height: u32,

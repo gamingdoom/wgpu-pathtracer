@@ -20,17 +20,18 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     rand_init(vec2<u32>(x, y), vec2<u32>(target_size.x, target_size.y), uniforms.camera.frame);
 
-    // Get ray origin and direction
-    let ro = uniforms.camera.position;
-    let rd = normalize((uniforms.camera.first_pixel_pos + uniforms.camera.pixel_space_x * f32(x) + uniforms.camera.pixel_space_y * f32(y)) - ro);
+    // // Get ray origin and direction
+    // let ro = uniforms.camera.position;
+    // let rd = normalize((uniforms.camera.first_pixel_pos + uniforms.camera.pixel_space_x * f32(x) + uniforms.camera.pixel_space_y * f32(y)) - ro);
 
-    var color = pixel_color(ro, rd, acc_struct);
+    // var color = pixel_color(ro, rd, acc_struct);
+    var color = pixel_color(vec2<u32>(x, y), acc_struct);
 
-    let prev_color = textureLoad(output, vec2<u32>(x, y));
+    let prev_color = max(vec4<f32>(0.0), textureLoad(output, vec2<u32>(x, y)));
     //let new_color = vec4<f32>(prev_color.rgb * 0.9 + color.rgb * 0.1, 1.0);
     //let new_color = vec4<f32>(mix(prev_color.rgb, color.rgb, 0.1), 1.0);
     //let new_color = color;
-    let new_color = vec4<f32>(((prev_color.rgb * f32(SAMPLES_PER_PIXEL) * (f32(uniforms.camera.frame) - 1)) + (color.rgb * f32(SAMPLES_PER_PIXEL))) / (f32(uniforms.camera.frame) * f32(SAMPLES_PER_PIXEL)), 1.0);
+    let new_color = vec4<f32>(((prev_color.rgb * f32(SAMPLES_PER_PIXEL) * (f32(uniforms.camera.frame) - 1)) + (color.rgb * f32(SAMPLES_PER_PIXEL))) / (f32(uniforms.camera.frame) * f32(SAMPLES_PER_PIXEL)), prev_color.a + 1.0);
 
     //var color = ray_color(ro, rd, acc_struct);
     //color = vec4<f32>(rd, 1.0);

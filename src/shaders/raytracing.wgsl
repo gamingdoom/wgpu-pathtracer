@@ -365,6 +365,7 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
 
     var color_mask = vec3<f32>(1.0, 1.0, 1.0);
     var accumulated_color = vec3<f32>(0.0, 0.0, 0.0);
+    var first_t: f32 = 0.0;
 
     for (var i = 0u; i <= MAX_BOUNCES; i++) {
         termination_depth += 1u;
@@ -373,6 +374,10 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
 
         if intersection.ri.kind != RAY_QUERY_INTERSECTION_NONE {
             let light = lights[rand_int() % uniforms.num_lights];
+
+            if i == 0u {
+                first_t = intersection.ri.t;
+            }
 
             var scattered: ScatteredRay;
             var importance: Fraction;
@@ -435,17 +440,23 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
         }
     }
 
-    return vec4<f32>(accumulated_color, 1.0);
+    return vec4<f32>(accumulated_color, first_t);
 }
 
-fn pixel_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<vertex_return>) -> vec4<f32> {
-    var color = vec4<f32>(0.0, 0.0, 0.0, 1.0);
+fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure<vertex_return>) -> vec4<f32> {
+    // Get ray origin and direction
+    let ro = uniforms.camera.position;
+    let rd = normalize((uniforms.camera.first_pixel_pos + uniforms.camera.pixel_space_x * f32(xy.x) + uniforms.camera.pixel_space_y * f32(xy.y)) - ro);
+
+    var color = vec4<f32>(0.0, 0.0, 0.0, 1000.0);
     
     for (var i = 0u; i < SAMPLES_PER_PIXEL; i++) {
         color += ray_color(ro, rd, acc_struct);
     }
 
     color /= f32(SAMPLES_PER_PIXEL);
+
+    textureStore(depth_output, xy, vec4<f32>(color.a, 0.0, 0.0, 1.0));
 
     color.w = 1.0;
 
