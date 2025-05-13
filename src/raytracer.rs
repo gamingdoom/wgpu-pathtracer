@@ -41,11 +41,12 @@ impl<'a> Raytracer<'a> {
 
         let mut scene = scene::Scene::new(&wgpu_state, camera);
 
+        scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
         //scene.load_obj(&wgpu_state, "res/minecraft/minecraft.obj");
         //scene.load_obj(&wgpu_state, "res/sports_car/sportsCar.obj");
         //scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
         //scene.load_obj(&wgpu_state, "res/living_room/living_room.obj");
-        scene.load_obj(&wgpu_state, "res/fireplace_room/fireplace_room.obj");
+        //scene.load_obj(&wgpu_state, "res/fireplace_room/fireplace_room.obj");
         //scene.load_obj(&wgpu_state, "res/cornell_box_pbr.obj");
         //scene.load_obj(&wgpu_state, "res/san_miguel/san-miguel.obj");
         //scene.load_obj(&wgpu_state, "res/bedroom/iscv2.obj");
@@ -159,6 +160,15 @@ impl<'a> Raytracer<'a> {
         self.scene.camera.width = self.wgpu_state.size.width;
         self.scene.camera.height = self.wgpu_state.size.height;
         self.scene.camera.update();
+
+        if self.window_cursor_grabbed {
+            self.wgpu_state.resize(self.wgpu_state.size);
+
+            if self.scene.camera.frame % 10 == 0 {
+                self.scene.camera.frame = 0;
+            }
+        }
+
         self.rayproject_render_step.update(&mut self.wgpu_state, &self.scene);
         
         let output = self.wgpu_state.surface.get_current_texture().unwrap();
@@ -209,10 +219,17 @@ impl<'a> Raytracer<'a> {
 
                         return true;
                     },
+                    // PhysicalKey::Code(KeyCode::KeyR) => {
+                    //     self.wgpu_state.resize(self.wgpu_state.size);
+                    //     self.scene.camera.frame = 0;
+
+                    //     return true;
+                    // }
                     PhysicalKey::Code(KeyCode::Space) => {
                         self.window_cursor_grabbed = !self.window_cursor_grabbed;
                         let mode = if self.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
                         self.wgpu_state.window.set_cursor_grab(mode).unwrap();
+                        self.scene.camera.frame = 0;
 
                         return true;
                     }

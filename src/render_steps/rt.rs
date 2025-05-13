@@ -285,6 +285,8 @@ impl RenderStep for RTStep {
     }
 
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        scene.camera.frame += 1;
+        
         let mut uniforms = uniforms::Uniforms::new(&scene.camera);
 
         let materials_uniform_vec = scene.materials.iter().map(|m| uniforms::Material::new(m.clone())).collect::<Vec<uniforms::Material>>();
