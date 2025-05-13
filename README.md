@@ -1,5 +1,5 @@
 # WGPU-pathtracer
-![demo image](classroom.png)
+![demo image](images/classroom.png)
 
 A pathtracer using WGPU that features:
 - OBJ Loading
