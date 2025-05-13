@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'rt-engine'",
+            "name": "Debug executable 'wgpu-pathtracer'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=rt-engine",
-                    "--package=rt-engine"
+                    "--bin=wgpu-pathtracer",
+                    "--package=wgpu-pathtracer"
                 ],
                 "filter": {
-                    "name": "rt-engine",
+                    "name": "wgpu-pathtracer",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'rt-engine'",
+            "name": "Debug unit tests in executable 'wgpu-pathtracer'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=rt-engine",
-                    "--package=rt-engine"
+                    "--bin=wgpu-pathtracer",
+                    "--package=wgpu-pathtracer"
                 ],
                 "filter": {
-                    "name": "rt-engine",
+                    "name": "wgpu-pathtracer",
                     "kind": "bin"
                 }
             },
