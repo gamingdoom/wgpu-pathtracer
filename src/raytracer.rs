@@ -132,6 +132,7 @@ impl<'a> Raytracer<'a> {
         // );
 
         self.scene.prev_camera = self.scene.camera;
+        self.scene.camera.frame += 1;
         self.rt_render_step.update(&mut self.wgpu_state, &self.scene);
         self.rt_render_step.render(&mut self.wgpu_state, &self.scene, &mut encoder, None);
 
@@ -162,11 +163,10 @@ impl<'a> Raytracer<'a> {
         self.scene.camera.update();
 
         if self.window_cursor_grabbed {
-            self.wgpu_state.resize(self.wgpu_state.size);
+            //self.resize(self.wgpu_state.size);
 
-            if self.scene.camera.frame % 10 == 0 {
-                self.scene.camera.frame = 0;
-            }
+            self.scene.camera.frame = 0;
+            
         }
 
         self.rayproject_render_step.update(&mut self.wgpu_state, &self.scene);
@@ -271,7 +271,7 @@ impl<'a> Raytracer<'a> {
     }
 
     pub fn resize(&mut self, size: winit::dpi::PhysicalSize<u32>) {
-        if size.width > 0 && size.height > 0 && self.wgpu_state.size != size {
+        if size.width > 0 && size.height > 0 { //&& self.wgpu_state.size != size {
             // wait queues
             self.wgpu_state.rt_device.poll(PollType::Wait).unwrap();
             self.wgpu_state.device.poll(PollType::Wait).unwrap();
@@ -279,7 +279,6 @@ impl<'a> Raytracer<'a> {
             self.wgpu_state.size = size;
             self.wgpu_state.config.width = size.width;
             self.wgpu_state.config.height = size.height;
-            self.blit_render_step.update(&mut self.wgpu_state, &self.scene);
 
             let latest_real_frame_desc = &wgpu::TextureDescriptor {
                 label: Some("prev_frame"),
@@ -326,6 +325,9 @@ impl<'a> Raytracer<'a> {
             self.rt_render_step.output_texture_view = self.rayproject_render_step.latest_real_frame_rt.create_view(&wgpu::TextureViewDescriptor::default());
 
             self.wgpu_state.resize_2();
+
+            self.blit_render_step.update(&mut self.wgpu_state, &self.scene);
+            self.rt_render_step.create_static_bind_groups(&mut self.wgpu_state, &self.scene);
 
             // self.wgpu_state.size = size;
             // self.wgpu_state.config.width = size.width;

@@ -13,6 +13,9 @@ pub struct RTStep {
     blases: Vec<wgpu::Blas>,
     tlas_package: wgpu::TlasPackage,
     pub output_texture_view: wgpu::TextureView,
+    
+    rt_bind_group: Option<wgpu::BindGroup>,
+    texture_bind_group: Option<wgpu::BindGroup>
 }
 
 impl RTStep {
@@ -23,16 +26,6 @@ impl RTStep {
                 wgpu::BindGroupLayoutEntry {
                     binding: 0,
                     visibility: wgpu::ShaderStages::COMPUTE,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Uniform,
-                        has_dynamic_offset: false,
-                        min_binding_size: None,
-                    },
-                    count: None,
-                },
-                wgpu::BindGroupLayoutEntry {
-                    binding: 1,
-                    visibility: wgpu::ShaderStages::COMPUTE,
                     ty: wgpu::BindingType::StorageTexture {
                         access: wgpu::StorageTextureAccess::ReadWrite,
                         format: wgpu::TextureFormat::Rgba32Float,
@@ -41,10 +34,20 @@ impl RTStep {
                     count: None,
                 },
                 wgpu::BindGroupLayoutEntry {
-                    binding: 2,
+                    binding: 1,
                     visibility: wgpu::ShaderStages::COMPUTE,
                     ty: wgpu::BindingType::AccelerationStructure {
                         vertex_return: true
+                    },
+                    count: None,
+                },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 2,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: true },
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
                     },
                     count: None,
                 },
@@ -91,16 +94,6 @@ impl RTStep {
                 wgpu::BindGroupLayoutEntry {
                     binding: 7,
                     visibility: wgpu::ShaderStages::COMPUTE,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Storage { read_only: true },
-                        has_dynamic_offset: false,
-                        min_binding_size: None,
-                    },
-                    count: None,
-                },
-                wgpu::BindGroupLayoutEntry {
-                    binding: 8,
-                    visibility: wgpu::ShaderStages::COMPUTE,
                     ty: wgpu::BindingType::StorageTexture {
                         access: wgpu::StorageTextureAccess::WriteOnly,
                         format: wgpu::TextureFormat::R32Float,
@@ -142,8 +135,161 @@ impl RTStep {
         bgl
     }
 
+    fn get_uniform_bgl(device: &wgpu::Device) -> wgpu::BindGroupLayout {
+        let bgl = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+            label: Some("bgl for shader_main.wgsl"),
+            entries: &[
+                wgpu::BindGroupLayoutEntry {
+                    binding: 0,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                },
+            ],
+        });
+
+        bgl
+    }
+
     pub fn set_output_texture(&mut self, tex: &wgpu::Texture) {
         self.output_texture_view = tex.create_view(&wgpu::TextureViewDescriptor::default());
+    }
+
+    pub fn create_static_bind_groups(&mut self, state: &wgpu_util::WGPUState, scene: &scene::Scene) {
+        let mut uniforms = uniforms::Uniforms::new(&scene.camera);
+
+        let materials_uniform_vec = scene.materials.iter().map(|m| uniforms::Material::new(m.clone())).collect::<Vec<uniforms::Material>>();
+
+        let materials_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&materials_uniform_vec), Some("Materials"));
+
+        let vertices_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&scene.vertices), Some("Vertices"));
+        let indices_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&scene.indices), Some("Indices"));
+
+        // InstanceInfo
+        let mut instance_infos = Vec::new();
+        for mesh in &scene.meshes {
+            instance_infos.push(uniforms::InstanceInfo::new(mesh.index_offset));
+        }
+
+        let instance_info_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&instance_infos), Some("InstanceInfos"));
+
+        let mut light_triangles = Vec::new();
+        for (i, indices) in scene.indices.chunks(3).enumerate() {
+            // Get the material index from self.meshes's offsets
+            let mut mat_idx = 0;
+            for mesh in &scene.meshes {
+                if ((i * 3) as u32) >= mesh.index_offset && ((i * 3) as u32) < mesh.index_offset + mesh.index_count {
+                    mat_idx = mesh.material_index;
+                    break;
+                }
+            }
+
+            let emissive = scene.materials[mat_idx as usize].emissive_texture_idx != 4;
+            if !emissive {
+                continue;
+            }
+
+            light_triangles.push(
+                uniforms::Triangle::new(
+                    scene.vertices[indices[0].index as usize].position,
+                    scene.vertices[indices[1].index as usize].position,
+                    scene.vertices[indices[2].index as usize].position,
+                    scene.vertices[indices[0].index as usize].normal,
+                )
+            );
+        }
+
+        if light_triangles.len() == 0 {
+            light_triangles = vec![uniforms::Triangle::new(
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+            )];
+        }
+
+        let light_triangles_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&light_triangles), Some("LightTriangles"));
+
+        uniforms.num_lights = light_triangles.len() as u32;
+
+        let uniform_buffer: UniformBuffer = UniformBuffer::new(&state.rt_device, bytemuck::cast_slice(&[uniforms]), Some("Uniforms"));
+
+        let rt_bgl = RTStep::get_rt_bgl(&state.rt_device);
+
+        let rt_bind_group = state.rt_device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: Some("RT Bind Group"),
+            layout: &rt_bgl,
+            entries: &[
+                // wgpu::BindGroupEntry {
+                //     binding: 0,
+                //     resource: uniform_buffer.buffer().buffer.as_entire_binding(),
+                // },
+                wgpu::BindGroupEntry {
+                    binding: 0,
+                    resource: wgpu::BindingResource::TextureView(
+                        &self.output_texture_view,
+                    ),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 1,
+                    resource: self.tlas_package.as_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 2,
+                    resource: materials_buffer.buffer().buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 3,
+                    resource: vertices_buffer.buffer().buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 4,
+                    resource: indices_buffer.buffer().buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 5,
+                    resource: instance_info_buffer.buffer().buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 6,
+                    resource: light_triangles_buffer.buffer().buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 7,
+                    resource: wgpu::BindingResource::TextureView(
+                        &state.depth_texture_rt_view,
+                    ),
+                },
+            ],
+        });
+
+        let texture_bgl = RTStep::get_texture_bgl(&state.rt_device, &scene);
+
+        let texture_bind_group = state.rt_device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: Some("Texture Bind Group"),
+            layout: &texture_bgl,
+            entries: &[
+                wgpu::BindGroupEntry {
+                    binding: 0,
+                    resource: wgpu::BindingResource::TextureViewArray(
+                        &scene.textures.iter().map(|texture| &texture.view).collect::<Vec<_>>()
+                    ),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 1,
+                    resource: wgpu::BindingResource::SamplerArray(
+                        &scene.textures.iter().map(|texture| &texture.sampler).collect::<Vec<_>>()
+                    ),
+                },
+            ],
+        });
+
+        self.rt_bind_group = Some(rt_bind_group);
+        self.texture_bind_group = Some(texture_bind_group);
     }
 }
 
@@ -151,6 +297,7 @@ impl RenderStep for RTStep {
     fn create(wgpu_state: &mut wgpu_util::WGPUState, scene: &scene::Scene) -> Self {
         let rt_bgl = RTStep::get_rt_bgl(&wgpu_state.rt_device);
         let texture_bgl = RTStep::get_texture_bgl(&wgpu_state.rt_device, &scene);
+        let uniform_bgl = RTStep::get_uniform_bgl(&wgpu_state.rt_device);
 
         let mut blases = Vec::new();
 
@@ -250,7 +397,7 @@ impl RenderStep for RTStep {
 
         let render_pipeline_layout = wgpu_state.rt_device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
             label: Some("Render Pipeline Layout"),
-            bind_group_layouts: &[&rt_bgl, &texture_bgl],
+            bind_group_layouts: &[&rt_bgl, &texture_bgl, &uniform_bgl],
             push_constant_ranges: &[],
         });
 
@@ -275,147 +422,45 @@ impl RenderStep for RTStep {
 
         let mut tlas_package = wgpu::TlasPackage::new(tlas);
         
-        Self {
+        let mut this = Self {
             pipeline: render_pipeline,
             bind_groups: Vec::new(),
             blases: blases,
             tlas_package: tlas_package,
             output_texture_view: wgpu_state.blit_storage_texture.create_view(&wgpu::TextureViewDescriptor::default()),
-        }
+            rt_bind_group: None,
+            texture_bind_group: None,
+        };
+        this
     }
 
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
-        scene.camera.frame += 1;
-        
         let mut uniforms = uniforms::Uniforms::new(&scene.camera);
-
-        let materials_uniform_vec = scene.materials.iter().map(|m| uniforms::Material::new(m.clone())).collect::<Vec<uniforms::Material>>();
-
-        let materials_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&materials_uniform_vec), Some("Materials"));
-
-        let vertices_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&scene.vertices), Some("Vertices"));
-        let indices_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&scene.indices), Some("Indices"));
-
-        // InstanceInfo
-        let mut instance_infos = Vec::new();
-        for mesh in &scene.meshes {
-            instance_infos.push(uniforms::InstanceInfo::new(mesh.index_offset));
-        }
-
-        let instance_info_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&instance_infos), Some("InstanceInfos"));
-
-        let mut light_triangles = Vec::new();
-        for (i, indices) in scene.indices.chunks(3).enumerate() {
-            // Get the material index from self.meshes's offsets
-            let mut mat_idx = 0;
-            for mesh in &scene.meshes {
-                if ((i * 3) as u32) >= mesh.index_offset && ((i * 3) as u32) < mesh.index_offset + mesh.index_count {
-                    mat_idx = mesh.material_index;
-                    break;
-                }
-            }
-
-            let emissive = scene.materials[mat_idx as usize].emissive_texture_idx != 4;
-            if !emissive {
-                continue;
-            }
-
-            light_triangles.push(
-                uniforms::Triangle::new(
-                    scene.vertices[indices[0].index as usize].position,
-                    scene.vertices[indices[1].index as usize].position,
-                    scene.vertices[indices[2].index as usize].position,
-                    scene.vertices[indices[0].index as usize].normal,
-                )
-            );
-        }
-
-        if light_triangles.len() == 0 {
-            light_triangles = vec![uniforms::Triangle::new(
-                [0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0],
-            )];
-        }
-
-        let light_triangles_buffer = StorageBuffer::new(&state.rt_device, bytemuck::cast_slice(&light_triangles), Some("LightTriangles"));
-
-        uniforms.num_lights = light_triangles.len() as u32;
 
         let uniform_buffer: UniformBuffer = UniformBuffer::new(&state.rt_device, bytemuck::cast_slice(&[uniforms]), Some("Uniforms"));
 
-        let rt_bgl = RTStep::get_rt_bgl(&state.rt_device);
+        let uniform_bgl = Self::get_uniform_bgl(&state.rt_device);
 
-        let rt_bind_group = state.rt_device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("RT Bind Group"),
-            layout: &rt_bgl,
+        let uniform_bind_group = state.rt_device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: Some("Uniform Bind Group"),
+            layout: &uniform_bgl,
             entries: &[
                 wgpu::BindGroupEntry {
                     binding: 0,
                     resource: uniform_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 1,
-                    resource: wgpu::BindingResource::TextureView(
-                        &self.output_texture_view,
-                    ),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 2,
-                    resource: self.tlas_package.as_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 3,
-                    resource: materials_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 4,
-                    resource: vertices_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 5,
-                    resource: indices_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 6,
-                    resource: instance_info_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 7,
-                    resource: light_triangles_buffer.buffer().buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 8,
-                    resource: wgpu::BindingResource::TextureView(
-                        &state.depth_texture_rt_view,
-                    ),
-                },
+                }
             ],
         });
 
-        let texture_bgl = RTStep::get_texture_bgl(&state.rt_device, &scene);
+        if self.rt_bind_group.is_none() || self.texture_bind_group.is_none() {
+            self.create_static_bind_groups(state, scene);
+        }
 
-        let texture_bind_group = state.rt_device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("Texture Bind Group"),
-            layout: &texture_bgl,
-            entries: &[
-                wgpu::BindGroupEntry {
-                    binding: 0,
-                    resource: wgpu::BindingResource::TextureViewArray(
-                        &scene.textures.iter().map(|texture| &texture.view).collect::<Vec<_>>()
-                    ),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 1,
-                    resource: wgpu::BindingResource::SamplerArray(
-                        &scene.textures.iter().map(|texture| &texture.sampler).collect::<Vec<_>>()
-                    ),
-                },
-            ],
-        });
-
-        self.bind_groups = vec![rt_bind_group, texture_bind_group];
+        self.bind_groups = vec![
+            self.rt_bind_group.clone().expect("the bind group doesn't exist"), 
+            self.texture_bind_group.clone().expect("the bind group doesn't exist"),
+            uniform_bind_group,
+        ];
     }
 
     fn render(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene, encoder: &mut wgpu::CommandEncoder, output: Option<&wgpu::SurfaceTexture>) {

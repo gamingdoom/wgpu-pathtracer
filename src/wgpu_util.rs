@@ -300,13 +300,101 @@ impl<'a> WGPUState<'a>{
     }
 
     pub fn resize_2(&mut self) {
+        // let surface_caps = self.surface.get_capabilities(&self.adapter);
+        // let surface_format = surface_caps.formats.iter()
+        //     .find(|f| f.is_srgb())
+        //     .copied()
+        //     .unwrap_or(surface_caps.formats[0]);
+
+        // self.config = wgpu::SurfaceConfiguration {
+        //     usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+        //     format: surface_format,
+        //     width: self.size.width,
+        //     height: self.size.height,
+        //     present_mode: surface_caps.present_modes[0],
+        //     alpha_mode: surface_caps.alpha_modes[0],
+        //     view_formats: vec![],
+        //     desired_maximum_frame_latency: 2,
+        // };
+
+        // self.surface.configure(&self.device, &self.config);
+
+        // // let storage_tex = self.device.create_texture(&wgpu::TextureDescriptor {
+        // //     label: None,
+        // //     size: wgpu::Extent3d {
+        // //         width: self.config.width,
+        // //         height: self.config.height,
+        // //         depth_or_array_layers: 1,
+        // //     },
+        // //     mip_level_count: 1,
+        // //     sample_count: 1,
+        // //     dimension: wgpu::TextureDimension::D2,
+        // //     format: wgpu::TextureFormat::Rgba32Float,
+        // //     usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_SRC,
+        // //     view_formats: &[],
+        // // });
+
+        // // self.blit_storage_texture = storage_tex;
+
+        // let depth_tex_desc = &wgpu::TextureDescriptor {
+        //     label: Some("depth_tex"),
+        //     size: wgpu::Extent3d {
+        //         width: self.config.width,
+        //         height: self.config.height,
+        //         depth_or_array_layers: 1,
+        //     },
+        //     mip_level_count: 1,
+        //     sample_count: 1,
+        //     dimension: wgpu::TextureDimension::D2,
+        //     format: wgpu::TextureFormat::R32Float,
+        //     usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING,
+        //     view_formats: &[],
+        // };
+
+        // let mut depth_texture = self.device.create_texture(depth_tex_desc);
+        // //std::mem::forget(depth_texture);
+        
+        // let mut depth_texture_rt = unsafe { self.rt_device.create_texture_from_hal::<Vulkan>(
+        //     self.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
+        //         self.depth_texture.as_hal::<Vulkan, _, _>(|tex| {
+        //             let handle = tex.unwrap().raw_handle();
+        //             handle
+        //         }), 
+        //         &wgpu::hal::TextureDescriptor {
+        //             label: Some("depth_tex"),
+        //             size: wgpu::Extent3d {
+        //                 width: self.config.width,
+        //                 height: self.config.height,
+        //                 depth_or_array_layers: 1,
+        //             },
+        //             mip_level_count: 1,
+        //             sample_count: 1,
+        //             dimension: wgpu::TextureDimension::D2,
+        //             format: wgpu::TextureFormat::R32Float,
+        //             view_formats: (&[]).to_vec(),
+        //             usage: wgpu::TextureUses::STORAGE_WRITE_ONLY,
+        //             memory_flags: wgpu::hal::MemoryFlags::empty()
+        //         }, 
+        //         Some(Box::new(|| {
+        //             println!("asked to drop resized?");
+        //         }))
+        //     )),
+        //     depth_tex_desc
+        // ) };
+        
+        // let view = depth_texture_rt.create_view(&wgpu::TextureViewDescriptor::default());
+
+        // self.depth_texture = depth_texture;
+        // self.depth_texture_rt_view = view;
+
+        // println!("resized");
         let surface_caps = self.surface.get_capabilities(&self.adapter);
         let surface_format = surface_caps.formats.iter()
             .find(|f| f.is_srgb())
             .copied()
             .unwrap_or(surface_caps.formats[0]);
 
-        self.config = wgpu::SurfaceConfiguration {
+        let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,
             width: self.size.width,
@@ -317,30 +405,28 @@ impl<'a> WGPUState<'a>{
             desired_maximum_frame_latency: 2,
         };
 
-        self.surface.configure(&self.device, &self.config);
+        self.surface.configure(&self.device, &config);
 
-        // let storage_tex = self.device.create_texture(&wgpu::TextureDescriptor {
-        //     label: None,
-        //     size: wgpu::Extent3d {
-        //         width: self.config.width,
-        //         height: self.config.height,
-        //         depth_or_array_layers: 1,
-        //     },
-        //     mip_level_count: 1,
-        //     sample_count: 1,
-        //     dimension: wgpu::TextureDimension::D2,
-        //     format: wgpu::TextureFormat::Rgba32Float,
-        //     usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_SRC,
-        //     view_formats: &[],
-        // });
-
-        // self.blit_storage_texture = storage_tex;
+        let storage_tex = self.device.create_texture(&wgpu::TextureDescriptor {
+            label: None,
+            size: wgpu::Extent3d {
+                width: config.width,
+                height: config.height,
+                depth_or_array_layers: 1,
+            },
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba32Float,
+            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_SRC,
+            view_formats: &[],
+        });
 
         let depth_tex_desc = &wgpu::TextureDescriptor {
-            label: Some("depth_tex"),
+            label: None,
             size: wgpu::Extent3d {
-                width: self.config.width,
-                height: self.config.height,
+                width: config.width,
+                height: config.height,
                 depth_or_array_layers: 1,
             },
             mip_level_count: 1,
@@ -351,20 +437,20 @@ impl<'a> WGPUState<'a>{
             view_formats: &[],
         };
 
-        let mut depth_texture = self.device.create_texture(depth_tex_desc);
-        //std::mem::forget(depth_texture);
-        
-        let mut depth_texture_rt = unsafe { self.rt_device.create_texture_from_hal::<Vulkan>(
+        let depth_tex: wgpu::Texture = self.device.create_texture(depth_tex_desc);
+
+        let raw_tex = unsafe { depth_tex.as_hal::<Vulkan, _, _>(|tex| {
+            tex.unwrap().raw_handle()
+        }) };
+
+        let depth_tex_rt = unsafe { self.rt_device.create_texture_from_hal::<Vulkan>(
             self.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
-                self.depth_texture.as_hal::<Vulkan, _, _>(|tex| {
-                    let handle = tex.unwrap().raw_handle();
-                    handle
-                }), 
+                raw_tex, 
                 &wgpu::hal::TextureDescriptor {
-                    label: Some("depth_tex"),
+                    label: Some("prev_frame"),
                     size: wgpu::Extent3d {
-                        width: self.config.width,
-                        height: self.config.height,
+                        width: config.width,
+                        height: config.height,
                         depth_or_array_layers: 1,
                     },
                     mip_level_count: 1,
@@ -376,18 +462,16 @@ impl<'a> WGPUState<'a>{
                     memory_flags: wgpu::hal::MemoryFlags::empty()
                 }, 
                 Some(Box::new(|| {
-                    println!("asked to drop resized?");
+                    println!("asked to drop?");
                 }))
             )),
             depth_tex_desc
         ) };
-        
-        let view = depth_texture_rt.create_view(&wgpu::TextureViewDescriptor::default());
 
-        self.depth_texture = depth_texture;
-        self.depth_texture_rt_view = view;
+        self.blit_storage_texture = storage_tex;
+        self.depth_texture = depth_tex;
+        self.depth_texture_rt_view = depth_tex_rt.create_view(&wgpu::TextureViewDescriptor::default());
 
-        println!("resized");
     }
 
     pub fn window(&self) -> &Window {

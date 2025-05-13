@@ -64,10 +64,12 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     let reprojected_pix_pos_on_vp_plane = new_center_to_old_pix / dot(new_center_to_old_pix, uniforms.camera.lookat - uniforms.camera.position);
 
     let reprojected_pix_x = (dot(normalize(uniforms.camera.pixel_space_x), reprojected_pix_pos_on_vp_plane) / length(uniforms.camera.pixel_space_x)) 
-                            + f32(uniforms.camera.width) * 0.5;
+                            + f32(uniforms.camera.width) * 0.5
+                            + 0.5;
     
     let reprojected_pix_y = (dot(normalize(uniforms.camera.pixel_space_y), reprojected_pix_pos_on_vp_plane) / length(uniforms.camera.pixel_space_y)) 
-                            + f32(uniforms.camera.height) * 0.5;
+                            + f32(uniforms.camera.height) * 0.5
+                            + 0.5;
 
     // if (reprojected_pix_x >= 0.0 && reprojected_pix_x < f32(uniforms.camera.width) 
     //     && reprojected_pix_y >= 0.0 && reprojected_pix_y < f32(uniforms.camera.height)) {
