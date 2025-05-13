@@ -54,6 +54,8 @@ impl<'a> Raytracer<'a> {
     }
 
     pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+        self.scene.camera.frame += 1;
+
         let output = self.wgpu_state.surface.get_current_texture()?;
 
         let view = output.texture.create_view(&wgpu::TextureViewDescriptor::default());
@@ -130,6 +132,14 @@ impl<'a> Raytracer<'a> {
         self.scene.camera.width = self.wgpu_state.size.width;
         self.scene.camera.height = self.wgpu_state.size.height;
         self.scene.camera.update();
+
+        if self.window_cursor_grabbed {
+            self.wgpu_state.resize(self.wgpu_state.size);
+
+            if self.scene.camera.frame % 10 == 0 {
+                self.scene.camera.frame = 0;
+            }
+        }
     }
 
     pub fn input(&mut self, event: &winit::event::WindowEvent) -> bool {
@@ -168,10 +178,17 @@ impl<'a> Raytracer<'a> {
 
                         return true;
                     },
+                    // PhysicalKey::Code(KeyCode::KeyR) => {
+                    //     self.wgpu_state.resize(self.wgpu_state.size);
+                    //     self.scene.camera.frame = 0;
+
+                    //     return true;
+                    // }
                     PhysicalKey::Code(KeyCode::Space) => {
                         self.window_cursor_grabbed = !self.window_cursor_grabbed;
                         let mode = if self.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
                         self.wgpu_state.window.set_cursor_grab(mode).unwrap();
+                        self.scene.camera.frame = 0;
 
                         return true;
                     }

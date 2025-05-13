@@ -69,7 +69,7 @@ impl Camera {
     
         self.first_pixel_pos = viewport_top_left + 0.5 * (self.pixel_space_x + self.pixel_space_y);
 
-        self.frame += 1;
+        //self.frame += 1;
 
         self.lookat[0] = self.position[0] + self.theta_x.cos() * self.theta_y.cos();
         self.lookat[1] = self.position[1] + self.theta_y.sin();

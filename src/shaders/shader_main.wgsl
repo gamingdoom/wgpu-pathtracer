@@ -28,8 +28,9 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     let prev_color = textureLoad(output, vec2<u32>(x, y));
     //let new_color = vec4<f32>(prev_color.rgb * 0.9 + color.rgb * 0.1, 1.0);
-    let new_color = vec4<f32>(mix(prev_color.rgb, color.rgb, 0.1), 1.0);
+    //let new_color = vec4<f32>(mix(prev_color.rgb, color.rgb, 0.1), 1.0);
     //let new_color = color;
+    let new_color = vec4<f32>(((prev_color.rgb * f32(SAMPLES_PER_PIXEL) * (f32(uniforms.camera.frame) - 1)) + (color.rgb * f32(SAMPLES_PER_PIXEL))) / (f32(uniforms.camera.frame) * f32(SAMPLES_PER_PIXEL)), 1.0);
 
     //var color = ray_color(ro, rd, acc_struct);
     //color = vec4<f32>(rd, 1.0);

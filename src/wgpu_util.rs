@@ -386,7 +386,7 @@ impl<'a> WGPUState<'a>{
     }
 
     pub fn resize(&mut self, size: winit::dpi::PhysicalSize<u32>) {
-        if size.width > 0 && size.height > 0 && self.size != size {
+        if size.width > 0 && size.height > 0 {// && self.size != size {
             self.size = size;
             self.config.width = size.width;
             self.config.height = size.height;
