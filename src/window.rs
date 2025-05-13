@@ -14,6 +14,7 @@ use crate::raytracer;
 pub fn run() {
     let event_loop = EventLoop::new().unwrap();
     let window = WindowBuilder::new()
+        .with_title("WGPU-pathtracer")
         .build(&event_loop)
         .unwrap();
 
