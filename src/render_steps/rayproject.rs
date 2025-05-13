@@ -224,7 +224,7 @@ impl RenderStep for RayprojectStep {
     
                 render_pass.dispatch_workgroups(state.config.width / shader_definitions::WORKGROUP_DIM, state.config.height / shader_definitions::WORKGROUP_DIM, 1);
                 
-                println!("reprojected");
+                //println!("reprojected");
             }
     
             let idx = state.pp_queue.submit(Some(encoder.finish()));

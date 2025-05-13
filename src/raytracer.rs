@@ -28,7 +28,9 @@ pub struct Raytracer<'a> {
     pub rt_render_step: render_steps::RTStep,
     pub rayproject_render_step: render_steps::RayprojectStep,
     pub blit_render_step: render_steps::BlitStep,
-    pub raytracer_submission_index: Option<wgpu::SubmissionIndex>
+    pub raytracer_submission_index: Option<wgpu::SubmissionIndex>,
+
+    time_since_last_frame: std::time::Instant,
 }
 
 impl<'a> Raytracer<'a> {
@@ -70,6 +72,8 @@ impl<'a> Raytracer<'a> {
             rayproject_render_step: rayproject_step,
             blit_render_step: blit_step,
             raytracer_submission_index: None,
+
+            time_since_last_frame: std::time::Instant::now(),
             //rt_pipeline: render_pipeline,
         }
     }
@@ -142,8 +146,12 @@ impl<'a> Raytracer<'a> {
         // unsafe {self.wgpu_state.vk_device.queue_submit(self.wgpu_state.rt_queue, submits, fence);}
 
         self.raytracer_submission_index = Some(self.wgpu_state.rt_queue.submit(Some(encoder.finish())));
+
+        println!("Real FPS: {}", 1.0 / self.time_since_last_frame.elapsed().as_secs_f32());
+
+        self.time_since_last_frame = std::time::Instant::now();
         
-        println!("submitted");
+        //println!("submitted");
 
         // let mut encoder = self.wgpu_state.device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Blit, Rayproject Encoder") });
 
