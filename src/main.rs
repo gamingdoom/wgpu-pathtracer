@@ -8,11 +8,15 @@ mod scene;
 mod camera;
 mod shaders;
 mod texture;
+mod render_steps;
 
 fn main() {
-    env_logger::init();
+    //env_logger::init();
+    env_logger::builder()
+        //.filter_level(log::LevelFilter::Trace)
+        .init();
 
     shaders::shader_definitions::WORKGROUP_DIM;
 
-    pollster::block_on(window::run());
+    window::run();
 }
