@@ -1,3 +1,6 @@
+//!#define pub
+//!#include "shader_definitions.rs"
+
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) tex_coords: vec2<f32>,
@@ -30,5 +33,5 @@ var r_sampler: sampler;
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
-    return pow(textureSample(r_color, r_sampler, vertex.tex_coords), vec4<f32>(0.66, 0.66, 0.66, 1.0));
+    return pow(textureSample(r_color, r_sampler, vertex.tex_coords), vec4<f32>(GAMMA, GAMMA, GAMMA, 1.0));
 }
