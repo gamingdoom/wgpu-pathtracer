@@ -446,7 +446,14 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
 fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure<vertex_return>) -> vec4<f32> {
     // Get ray origin and direction
     let ro = uniforms.camera.position;
-    let rd = normalize((uniforms.camera.first_pixel_pos + uniforms.camera.pixel_space_x * f32(xy.x) + uniforms.camera.pixel_space_y * f32(xy.y)) - ro);
+    let rd = normalize(
+        (
+            uniforms.camera.first_pixel_pos 
+            + uniforms.camera.pixel_space_x * (f32(xy.x) + (0.5 * rand_float()))
+            + uniforms.camera.pixel_space_y * (f32(xy.y) + (0.5 * rand_float()))
+        ) 
+        - ro
+    );
 
     var color = vec4<f32>(0.0, 0.0, 0.0, 1000.0);
     
