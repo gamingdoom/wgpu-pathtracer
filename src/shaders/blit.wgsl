@@ -1,5 +1,6 @@
 //!#define pub
 //!#include "shader_definitions.rs"
+//!#include "color.wgsl"
 
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
@@ -33,5 +34,12 @@ var r_sampler: sampler;
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
-    return pow(textureSample(r_color, r_sampler, vertex.tex_coords), vec4<f32>(GAMMA, GAMMA, GAMMA, 1.0));
+    var color = textureSample(r_color, r_sampler, vertex.tex_coords);
+    color = vec4<f32>(to_khronos_pbr_neutral(color.rgb), color.a);
+    //color = pow(color, vec4<f32>(GAMMA, GAMMA, GAMMA, 1.0));
+
+    //color = saturate(color);
+
+    return color;
+    //return textureSample(r_color, r_sampler, vertex.tex_coords);
 }

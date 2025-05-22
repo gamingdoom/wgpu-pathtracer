@@ -56,7 +56,8 @@ pub struct Uniforms {
     pub camera: Camera,
 
     pub num_lights: u32,
-    _pad: [u32; 3]
+    pub is_grabbed: u32,
+    _pad: [u32; 2]
 }
 
 impl Uniforms {
@@ -64,7 +65,8 @@ impl Uniforms {
         Self {
             camera: Camera::new(&cam),
             num_lights: 0,
-            _pad: [0, 0, 0]
+            is_grabbed: 0,
+            _pad: [0, 0],
         }
     }
 }
@@ -103,6 +105,10 @@ pub struct Material {
     anisotropy: f32,
     anisotropy_rotation: f32,
     normal_texture_idx: u32,
+    transmission_texture_idx: u32,
+    
+    ior_texture_idx: u32,
+
     //_pad: u32
 }
 
@@ -121,6 +127,8 @@ impl Material {
             anisotropy: mat.anisotropy,
             anisotropy_rotation: mat.anisotropy_rotation,
             normal_texture_idx: mat.normal_texture_idx,
+            transmission_texture_idx: mat.transmission_texture_idx,
+            ior_texture_idx: mat.ior_texture_idx,
             //_pad: 0
         }
     }

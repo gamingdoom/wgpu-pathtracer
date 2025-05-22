@@ -79,6 +79,29 @@ impl Texture {
         label: Option<&str>
     ) -> Result<Self, image::ImageError> {
         let rgba = img.to_rgba32f();
+        
+        let is_compressed = img.dimensions().0 % 4 == 0 && img.dimensions().1 % 4 == 0;
+
+        let mut format = wgpu::TextureFormat::Rgba32Float;
+        let mut data;
+        let mut bytes_per_row;
+        if is_compressed {
+            let compressed = image_dds::SurfaceRgba32Float::from_image(&rgba).encode(
+                image_dds::ImageFormat::BC7RgbaUnorm,
+                image_dds::Quality::Fast,
+                image_dds::Mipmaps::Disabled
+            );
+            format = wgpu::TextureFormat::Bc7RgbaUnorm;
+            data = compressed.unwrap().data;
+
+            bytes_per_row = Some(16 * (img.dimensions().0 / 4) as u32);
+
+            println!("{}", bytes_per_row.unwrap());
+        } else {
+            data = rgba.as_bytes().to_vec();
+            bytes_per_row = Some(4 * img.dimensions().0 * std::mem::size_of::<f32>() as u32);
+        }
+
         let dimensions = img.dimensions();
 
         let size = wgpu::Extent3d {
@@ -93,7 +116,8 @@ impl Texture {
                 mip_level_count: 1,
                 sample_count: 1,
                 dimension: wgpu::TextureDimension::D2,
-                format: wgpu::TextureFormat::Rgba32Float,
+                //format: wgpu::TextureFormat::Rgba32Float,
+                format,
                 usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
                 view_formats: &[],
             }
@@ -106,10 +130,11 @@ impl Texture {
                 mip_level: 0,
                 origin: wgpu::Origin3d::ZERO,
             },
-            &rgba.as_bytes(),
+            //&rgba.as_bytes(),
+            &data,
             wgpu::TexelCopyBufferLayout {
                 offset: 0,
-                bytes_per_row: Some(4 * dimensions.0 * std::mem::size_of::<f32>() as u32),
+                bytes_per_row: bytes_per_row,//Some(4 * dimensions.0 * std::mem::size_of::<f32>() as u32),
                 rows_per_image: Some(dimensions.1),
             },
             size,
@@ -118,9 +143,9 @@ impl Texture {
         let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
         let sampler = device.create_sampler(
             &wgpu::SamplerDescriptor {
-                address_mode_u: wgpu::AddressMode::ClampToEdge,
-                address_mode_v: wgpu::AddressMode::ClampToEdge,
-                address_mode_w: wgpu::AddressMode::ClampToEdge,
+                address_mode_u: wgpu::AddressMode::Repeat,
+                address_mode_v: wgpu::AddressMode::Repeat,
+                address_mode_w: wgpu::AddressMode::Repeat,
                 mag_filter: wgpu::FilterMode::Linear,
                 min_filter: wgpu::FilterMode::Nearest,
                 mipmap_filter: wgpu::FilterMode::Nearest,
@@ -196,9 +221,9 @@ impl Texture {
         path: &str,
         label: Option<&str>
     ) -> Result<Self, image::ImageError> {
-            let img = image::open(path).unwrap();
+        let img = image::open(path).unwrap();
 
-            Self::from_image_rgba(device, queue, &img, label)
+        Self::from_image_rgba(device, queue, &img, label)
     }
 
     pub fn from_file_scalar(

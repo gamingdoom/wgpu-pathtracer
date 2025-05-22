@@ -22,6 +22,7 @@ struct Camera {
 struct Uniforms {
     camera: Camera,
     num_lights: u32,
+    is_grabbed: u32,
 };
 
 // struct Material {
@@ -55,6 +56,9 @@ struct Material {
     anisotropy: f32,
     anisotropy_rotation: f32,
     normal_texture_idx: u32,
+    transmission_texture_idx: u32,
+
+    ior_texture_idx: u32,
 };
 
 struct Vertex {

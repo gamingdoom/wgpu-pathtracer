@@ -1,9 +1,9 @@
-use std::num::NonZeroU32;
+use std::{borrow::Cow, num::NonZeroU32};
 
 use glam::{Vec3, Mat4};
-use wgpu::{util::DeviceExt, TlasInstance};
+use wgpu::{naga, util::DeviceExt, TlasInstance};
 
-use crate::{scene, shaders::shader_definitions, uniforms, wgpu_buffer::{BufferType, StorageBuffer, UniformBuffer}, wgpu_util};
+use crate::{scene, shader, shaders::shader_definitions, uniforms, wgpu_buffer::{BufferType, StorageBuffer, UniformBuffer}, wgpu_util};
 use crate::render_steps::RenderStep;
 
 pub struct RTStep {
@@ -216,6 +216,8 @@ impl RTStep {
 
         uniforms.num_lights = light_triangles.len() as u32;
 
+        uniforms.is_grabbed = state.window_cursor_grabbed as u32;
+
         let uniform_buffer: UniformBuffer = UniformBuffer::new(&state.rt_device, bytemuck::cast_slice(&[uniforms]), Some("Uniforms"));
 
         let rt_bgl = RTStep::get_rt_bgl(&state.rt_device);
@@ -390,10 +392,12 @@ impl RenderStep for RTStep {
 
         wgpu_state.rt_queue.submit(Some(encoder.finish()));
         
-        let shader = wgpu_state.rt_device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/shader_main.wgsl").into()),
-        });
+        // let shader = wgpu_state.rt_device.create_shader_module(wgpu::ShaderModuleDescriptor {
+        //     label: Some("shader_main.hlsl"),
+        //     source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/shader_main.wgsl").into()),
+        // });
+
+        let shader = shader::create_shader_compute(wgpu_state, &wgpu_state.rt_device, "shaders/shader_main.wgsl");
 
         let render_pipeline_layout = wgpu_state.rt_device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
             label: Some("Render Pipeline Layout"),
@@ -405,7 +409,7 @@ impl RenderStep for RTStep {
             label: Some("pipeline for shader_main.wgsl"),
             layout: Some(&render_pipeline_layout),
             module: &shader,
-            entry_point: None,
+            entry_point: Some("main"),
             compilation_options: Default::default(),
             cache: None,
         });
@@ -436,6 +440,8 @@ impl RenderStep for RTStep {
 
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
         let mut uniforms = uniforms::Uniforms::new(&scene.camera);
+
+        uniforms.is_grabbed = state.window_cursor_grabbed as u32;
 
         let uniform_buffer: UniformBuffer = UniformBuffer::new(&state.rt_device, bytemuck::cast_slice(&[uniforms]), Some("Uniforms"));
 

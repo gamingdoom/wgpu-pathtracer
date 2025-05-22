@@ -52,6 +52,11 @@ fn rotate_point(quat: vec4<f32>, point: vec3<f32>) -> vec3<f32> {
     return 2.0 * dot(q_axis, point) * q_axis + (quat.w * quat.w - dot(q_axis, q_axis)) * point + 2.0 * quat.w * cross(q_axis, point);
 }
 
+fn sample_texture_rgba(idx: u32, uv: vec2<f32>) -> vec4<f32> {
+    let rgba = textureSampleLevel(textures[idx], samplers[idx], uv, 0.0);
+    return rgba;
+}
+
 fn sample_texture_color(idx: u32, uv: vec2<f32>) -> vec3<f32> {
     let rgba = textureSampleLevel(textures[idx], samplers[idx], uv, 0.0);
     return vec3<f32>(rgba.x, rgba.y, rgba.z);
@@ -59,14 +64,14 @@ fn sample_texture_color(idx: u32, uv: vec2<f32>) -> vec3<f32> {
 
 fn sample_texture_float(idx: u32, uv: vec2<f32>) -> f32 {
     let rgba = textureSampleLevel(textures[idx], samplers[idx], uv, 0.0);
-    // let rgba = textureLoad(textures[idx], uv, 0);
     return rgba.x;
 }
 
 struct SampledMaterial {
     albedo: vec3<f32>,
-    roughness: f32,
+    alpha: f32,
 
+    roughness: f32,
     specular: vec3<f32>,
     metallic: f32,
 
@@ -77,6 +82,9 @@ struct SampledMaterial {
     clearcoat_roughness: f32,
     anisotropy: f32,
     anisotropy_rotation: f32,
+
+    transmission_weight: f32,
+    ior: f32,
 
     // TODO normal mapping
 };

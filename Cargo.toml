@@ -3,6 +3,9 @@ name = "wgpu-pathtracer"
 version = "0.1.0"
 edition = "2024"
 
+[patch.crates-io]
+wgpu = { git = "https://github.com/gamingdoom/wgpu.git", version = "25.0.0" }
+
 [dependencies]
 bytemuck = "1.22.0"
 env_logger = "0.11.8"
@@ -10,11 +13,16 @@ glam = "0.30.1"
 log = "0.4.27"
 pollster = "0.4.0"
 tobj = "4.0.3"
-wgpu = { git = "https://github.com/gfx-rs/wgpu.git" }
+wgpu = { version = "25.0.0", features = ["spirv", "glsl"] }
 winit = { version = "0.29", features = ["rwh_05"] }
 wgsl_preprocessor = { path = "./wgsl_preprocessor" }
 image = "0.25.6"
 ash = "0.38.0"
+image_dds = "0.7.2"
+wgpu-profiler = "0.23.0"
+profiling = "1.0.16"
+inline-spirv = "0.2.1"
+jit-spirv = "0.1.1"
 
 [build-dependencies]
 wgsl_preprocessor = { path = "./wgsl_preprocessor" }

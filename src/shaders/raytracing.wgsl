@@ -4,6 +4,9 @@
 //!#include "random.wgsl"
 //!#include "helpers.wgsl"
 //!#include "brdf.wgsl"
+//!#include "bsdf.wgsl"
+//!#include "sky.wgsl"
+//!#include "restir_di.wgsl"
 
 struct ScatteredRay {
     origin: vec3<f32>,
@@ -29,8 +32,12 @@ struct Fraction {
 }
 
 fn sample_material(material: Material, uv: vec2<f32>) -> SampledMaterial {
+    let rgba = sample_texture_rgba(material.albedo_texture_idx, uv);
+
     return SampledMaterial (
-        sample_texture_color(material.albedo_texture_idx, uv),
+        rgba.rgb,
+        rgba.a,
+
         sample_texture_float(material.roughness_texture_idx, uv),
 
         sample_texture_color(material.specular_texture_idx, uv),
@@ -43,11 +50,14 @@ fn sample_material(material: Material, uv: vec2<f32>) -> SampledMaterial {
         material.clearcoat_roughness,
         material.anisotropy,
         material.anisotropy_rotation,
+
+        sample_texture_float(material.transmission_texture_idx, uv),
+        sample_texture_float(material.ior_texture_idx, uv)
     );
 }
 
-fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<vertex_return>) -> RayIntersectionCustom {
-    var rq: ray_query<vertex_return>;
+fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -> RayIntersectionCustom {
+    var rq: ray_query;
 
     // Flags: 
     //cull back facing -> 0x10
@@ -75,7 +85,11 @@ fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
 
     let w = 1.0 - rq_intersection.barycentrics.x - rq_intersection.barycentrics.y;
 
-    let uv = rq_intersection.barycentrics.x * verts[1].uv + rq_intersection.barycentrics.y * verts[2].uv + w * verts[0].uv;
+    //let uv = rq_intersection.barycentrics.x * verts[1].uv + rq_intersection.barycentrics.y * verts[2].uv + w * verts[0].uv;
+
+    let bary = vec3<f32>(w, rq_intersection.barycentrics.x, rq_intersection.barycentrics.y);
+    let uv = verts[0].uv * bary.x + verts[1].uv * bary.y + verts[2].uv * bary.z;
+    //let uv = rq_intersection.barycentrics.x * verts[2].uv + rq_intersection.barycentrics.y * verts[1].uv + w * verts[0].uv;
 
     let material = sample_material(materials[rq_intersection.instance_custom_data], uv);
 
@@ -273,7 +287,8 @@ fn scatter(ro: vec3<f32>, rd: vec3<f32>, intersection: RayIntersectionCustom) ->
 
     //let ray_outgoing = rand_in_cosine_weighted_hemisphere(n);
 
-    let result = disney_brdf(p, rd, n, material);
+    //let result = disney_brdf(p, rd, n, material);
+    let result = disney_bsdf(p, rd, n, material);
 
     var scattered: ScatteredRay = ScatteredRay(
         p,
@@ -348,16 +363,7 @@ fn send_ray_to_light(ro_i: vec3<f32>, rd_i: vec3<f32>, intersection: RayIntersec
     // sent_to_light = true;  
 }
 
-fn sky_color(rd: vec3<f32>) -> vec3<f32> {
-    var unit_direction = normalize(rd);
-    var t = 0.5 * (unit_direction.y + 1.0);
-
-    return vec3<f32>(1.0, 1.0, 1.0) * (1.0 - t) + vec3<f32>(0.5, 0.7, 1.0) * t;
-
-    //return vec3<f32>(0.0517339484814);
-}
-
-fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<vertex_return>) -> vec4<f32> {
+fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -> vec4<f32> {
     var curr_ro = ro;
     var curr_rd = rd;
 
@@ -425,7 +431,9 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
 
             accumulated_color += material.emissive * color_mask;
 
-            color_mask *= scattered.attenuation * scattered_pdf * importance.numerator / importance.denominator;
+            //color_mask *= scattered.attenuation * scattered_pdf * importance.numerator / importance.denominator;
+            //color_mask *= scattered.attenuation * scattered_pdf;
+            color_mask *= scattered.attenuation;
 
             if intersection.hit_light == true {
                 break;
@@ -443,7 +451,7 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure<ve
     return vec4<f32>(accumulated_color, first_t);
 }
 
-fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure<vertex_return>) -> vec4<f32> {
+fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure) -> vec4<f32> {
     // Get ray origin and direction
     let ro = uniforms.camera.position;
     let rd = normalize(
@@ -459,6 +467,7 @@ fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure<vertex_return>)
     
     for (var i = 0u; i < SAMPLES_PER_PIXEL; i++) {
         color += ray_color(ro, rd, acc_struct);
+        //color += ray_color_restir_di(ro, rd, acc_struct);
     }
 
     color /= f32(SAMPLES_PER_PIXEL);
@@ -469,6 +478,8 @@ fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure<vertex_return>)
 
     //color = vec4<f32>(sqrt(color.rgb), 1.0);
     //color = vec4<f32>(color.rgb * color.rgb, 1.0);
+
+    //color = vec4<f32>(to_khronos_pbr_neutral(color.rgb), 1.0);
     
     return color;
 }

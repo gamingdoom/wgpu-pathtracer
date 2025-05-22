@@ -31,6 +31,7 @@ pub struct WGPUState <'a> {
     pub window: &'a Window,
     pub rt_device: wgpu::Device,
     pub rt_queue: wgpu::Queue,
+    pub window_cursor_grabbed: bool
 }
 
 impl<'a> WGPUState<'a>{
@@ -66,7 +67,9 @@ impl<'a> WGPUState<'a>{
             | wgpu::Features::SAMPLED_TEXTURE_AND_STORAGE_BUFFER_ARRAY_NON_UNIFORM_INDEXING
             | wgpu::Features::FLOAT32_FILTERABLE
             | wgpu::Features::TEXTURE_ADAPTER_SPECIFIC_FORMAT_FEATURES
-            | wgpu::Features::CLEAR_TEXTURE;
+            | wgpu::Features::CLEAR_TEXTURE
+            | wgpu::Features::SPIRV_SHADER_PASSTHROUGH
+            | wgpu::Features::TEXTURE_COMPRESSION_BC;
 
         let mut extensions = unsafe { adapter.as_hal::<Vulkan, _, _>(|adapter| {return adapter.unwrap().required_device_extensions(
             features
@@ -171,7 +174,7 @@ impl<'a> WGPUState<'a>{
         })}.unwrap();
 
         unsafe {
-            device.start_graphics_debugger_capture();
+            //device.start_graphics_debugger_capture();
             device_2.start_graphics_debugger_capture();
         }
 
@@ -296,6 +299,7 @@ impl<'a> WGPUState<'a>{
             window,
             rt_device: device_2,
             rt_queue: rt_queue,
+            window_cursor_grabbed: false,
         }
     }
 

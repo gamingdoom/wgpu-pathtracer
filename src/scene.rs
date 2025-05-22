@@ -38,6 +38,9 @@ pub struct Material {
     pub anisotropy: f32,
     pub anisotropy_rotation: f32,
     pub normal_texture_idx: u32,
+
+    pub transmission_texture_idx: u32,
+    pub ior_texture_idx: u32,
 }
 
 
@@ -82,6 +85,9 @@ impl Scene {
         textures.push(texture::Texture::from_color(&state.rt_device, &state.rt_queue, image::Rgba([0.0, 0.0, 0.0, 1.0]), Some("emissive default")).unwrap());
         textures.push(texture::Texture::from_scalar(&state.rt_device, &state.rt_queue, image::Luma([0.0]), Some("sheen default")).unwrap());
         textures.push(texture::Texture::from_color(&state.rt_device, &state.rt_queue, image::Rgba([0.0, 0.0, 0.0, 1.0]), Some("normal default")).unwrap());
+        
+        textures.push(texture::Texture::from_scalar(&state.rt_device, &state.rt_queue, image::Luma([0.0]), Some("transmission weight default")).unwrap());
+        textures.push(texture::Texture::from_scalar(&state.rt_device, &state.rt_queue, image::Luma([1.0]), Some("IOR default")).unwrap());
 
         // Default material
         materials.push(Material { 
@@ -95,7 +101,9 @@ impl Scene {
             clearcoat_thickness: 0.0,
             clearcoat_roughness: 0.0,
             anisotropy: 0.0,
-            anisotropy_rotation: 0.0
+            anisotropy_rotation: 0.0,
+            transmission_texture_idx: 7,
+            ior_texture_idx: 8,
         });
 
         Self {
@@ -132,6 +140,9 @@ impl Scene {
  
             let normal_texture_idx = self.get_material_texture_known_vector(state, material.normal_texture.clone(), None, path).unwrap_or(6);
 
+            let transmission_texture_idx = self.get_material_texture_prop(state, material, "map_d", "d", true, path).unwrap_or(7);
+            let ior_texture_idx = self.get_material_texture_prop(state, material, "map_Ni", "Ni", true, path).unwrap_or(8);
+
             self.materials.push(Material { 
                 albedo_texture_idx,
                 roughness_texture_idx,
@@ -144,7 +155,10 @@ impl Scene {
                 clearcoat_thickness: Scene::get_material_scalar_prop(material, "Pc").unwrap_or(0.0),
                 clearcoat_roughness: Scene::get_material_scalar_prop(material, "Pcr").unwrap_or(0.0),
                 anisotropy: Scene::get_material_scalar_prop(material, "Pn").unwrap_or(0.0),
-                anisotropy_rotation: Scene::get_material_scalar_prop(material, "Pnr").unwrap_or(0.0)
+                anisotropy_rotation: Scene::get_material_scalar_prop(material, "Pnr").unwrap_or(0.0),
+
+                transmission_texture_idx,
+                ior_texture_idx,
              });
         }
 
@@ -161,7 +175,7 @@ impl Scene {
 
                 let mut uv = [0.0, 0.0];
                 if mesh.texcoords.len() != 0 {
-                    uv = [mesh.texcoords[i * 2], mesh.texcoords[i * 2 + 1]];
+                    uv = [mesh.texcoords[i * 2], 1.0 - mesh.texcoords[i * 2 + 1]];
                 }
 
                 self.vertices.push(

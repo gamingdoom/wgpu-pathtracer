@@ -9,6 +9,7 @@ mod camera;
 mod shaders;
 mod texture;
 mod render_steps;
+mod shader;
 
 fn main() {
     //env_logger::init();

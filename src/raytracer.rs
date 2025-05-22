@@ -22,7 +22,7 @@ use crate::shaders::shader_definitions;
 
 pub struct Raytracer<'a> {
     pub wgpu_state: wgpu_util::WGPUState<'a>,
-    pub window_cursor_grabbed: bool,
+    //pub window_cursor_grabbed: bool,
     pub scene: scene::Scene,
 
     pub rt_render_step: render_steps::RTStep,
@@ -52,6 +52,9 @@ impl<'a> Raytracer<'a> {
         //scene.load_obj(&wgpu_state, "res/cornell_box_pbr.obj");
         //scene.load_obj(&wgpu_state, "res/san_miguel/san-miguel.obj");
         //scene.load_obj(&wgpu_state, "res/bedroom/iscv2.obj");
+        //scene.load_obj(&wgpu_state, "res/subway/subway.obj");
+        //scene.load_obj(&wgpu_state, "res/bistro/bistro.obj");
+        //scene.load_obj(&wgpu_state, "res/glass_cube.obj");
 
         //let (render_pipeline, blases) = scene.create_resources(&wgpu_state.device, &wgpu_state.queue);
 
@@ -66,7 +69,7 @@ impl<'a> Raytracer<'a> {
 
         Self {
             wgpu_state: wgpu_state,
-            window_cursor_grabbed: false,
+            //window_cursor_grabbed: false,
             scene,
             rt_render_step: rt_step,
             rayproject_render_step: rayproject_step,
@@ -170,10 +173,10 @@ impl<'a> Raytracer<'a> {
         self.scene.camera.height = self.wgpu_state.size.height;
         self.scene.camera.update();
 
-        if self.window_cursor_grabbed {
+        if self.wgpu_state.window_cursor_grabbed {
             //self.resize(self.wgpu_state.size);
 
-            self.scene.camera.frame = 0;
+            //self.scene.camera.frame = 0;
             
         }
 
@@ -234,10 +237,10 @@ impl<'a> Raytracer<'a> {
                     //     return true;
                     // }
                     PhysicalKey::Code(KeyCode::Space) => {
-                        self.window_cursor_grabbed = !self.window_cursor_grabbed;
-                        let mode = if self.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
+                        self.wgpu_state.window_cursor_grabbed = !self.wgpu_state.window_cursor_grabbed;
+                        let mode = if self.wgpu_state.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
                         self.wgpu_state.window.set_cursor_grab(mode).unwrap();
-                        self.scene.camera.frame = 0;
+                        //self.scene.camera.frame = 0;
 
                         return true;
                     }
@@ -245,7 +248,7 @@ impl<'a> Raytracer<'a> {
                 }
             },
             winit::event::WindowEvent::CursorMoved { position, .. } => {
-                if self.window_cursor_grabbed {
+                if self.wgpu_state.window_cursor_grabbed {
                     if position.x != self.wgpu_state.config.width as f64 / 2.0 || position.y != self.wgpu_state.config.height as f64 / 2.0 {
                         //if (theta_x + event.motion.xrel * 0.01f < M_PI/2.0f && theta_x + event.motion.xrel * 0.01f > -M_PI/2.0f) {
                         self.scene.camera.theta_x += (position.x - self.wgpu_state.config.width as f64 / 2.0).atan() as f32 * 0.0025;

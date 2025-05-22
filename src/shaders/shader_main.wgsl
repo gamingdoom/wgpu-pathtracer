@@ -1,14 +1,19 @@
-//!#include "uniforms.wgsl"
-//!#include "shader_resources.wgsl"
-
 //!#define pub
 //!#include "shader_definitions.rs"
+
+//!#include "uniforms.wgsl"
+//!#include "shader_resources.wgsl"
 
 //!#include "random.wgsl"
 
 //!#include "helpers.wgsl"
+//!#include "color.wgsl"
 
 //!#include "brdf.wgsl"
+//!#include "bsdf.wgsl"
+
+//!#include "sky.wgsl"
+//!#include "restir_di.wgsl"
 //!#include "raytracing.wgsl"
 
 @compute @workgroup_size(WORKGROUP_DIM, WORKGROUP_DIM)
@@ -27,11 +32,24 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     // var color = pixel_color(ro, rd, acc_struct);
     var color = pixel_color(vec2<u32>(x, y), acc_struct);
 
-    let prev_color = max(vec4<f32>(0.0), textureLoad(output, vec2<u32>(x, y)));
+    var prev_color = max(vec4<f32>(0.0), textureLoad(output, vec2<u32>(x, y)));
+    //prev_color = vec4<f32>(from_khronos_pbr_neutral(prev_color.rgb), prev_color.a);
     //let new_color = vec4<f32>(prev_color.rgb * 0.9 + color.rgb * 0.1, 1.0);
     //let new_color = vec4<f32>(mix(prev_color.rgb, color.rgb, 0.1), 1.0);
-    //let new_color = color;
-    let new_color = vec4<f32>(((prev_color.rgb * f32(SAMPLES_PER_PIXEL) * (f32(uniforms.camera.frame) - 1)) + (color.rgb * f32(SAMPLES_PER_PIXEL))) / (f32(uniforms.camera.frame) * f32(SAMPLES_PER_PIXEL)), prev_color.a + 1.0);
+    
+    var new_color: vec4<f32>;
+
+    if (uniforms.is_grabbed == 0) {
+        new_color = vec4<f32>(((prev_color.rgb * prev_color.a) + (color.rgb)) / (f32(prev_color.a + 1.0)), prev_color.a + 1.0);
+    } else {
+        new_color = vec4<f32>(color.rgb, 1.0);
+    }
+    
+
+    //new_color = pow(new_color, vec4<f32>(GAMMA, GAMMA, GAMMA, 1.0));
+
+    //let new_color = pow(color, vec4<f32>(GAMMA, GAMMA, GAMMA, 1.0));
+    //let new_color = vec4<f32>(((prev_color.rgb * f32(SAMPLES_PER_PIXEL) * (f32(uniforms.camera.frame) - 1)) + (color.rgb * f32(SAMPLES_PER_PIXEL))) / (f32(uniforms.camera.frame) * f32(SAMPLES_PER_PIXEL)), prev_color.a + 1.0);
 
     //var color = ray_color(ro, rd, acc_struct);
     //color = vec4<f32>(rd, 1.0);

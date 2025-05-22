@@ -2,7 +2,7 @@
 
 struct BRDFData {
     p: vec3<f32>, 
-    ray_incoming: vec3<f32>, 
+    // ray_incoming: vec3<f32>, 
     v: vec3<f32>,
     ray_outgoing: vec3<f32>, 
     normal: vec3<f32>, 
@@ -96,8 +96,8 @@ fn ggx(
     data: BRDFData
 ) -> f32 {
     // alpha^2 / (pi * ((alpha^2 - 1) * dot(normal, halfway)^2 + 1)^2)
-    let b = (data.alpha_x - 1.0) * (data.ndoth * data.ndoth) + 1.0;
-    return (data.alpha_x) / (PI * b * b);
+    let b = (data.alpha_x * data.alpha_x - 1.0) * (data.ndoth * data.ndoth) + 1.0;
+    return (data.alpha_x * data.alpha_x) / (PI * b * b);
 }
 
 // fn ggx_sample_microfacet_normal(
@@ -194,7 +194,11 @@ fn smith_ggx(
     data: BRDFData,
     hdots: f32
 ) -> f32 {
-    return 1.0 / (1.0 + lambda_ggx((hdots)/(data.alpha_x * sqrt(1.0 - hdots * hdots))));
+    return 1.0 / (1.0 + lambda_ggx(
+        (hdots)
+        /
+        (data.alpha_x * sqrt(1.0 - hdots * hdots)))
+    );
 }
 
 // fn ggx_sample_pdf(
@@ -334,20 +338,20 @@ fn prep_data(
     var data = BRDFData();
 
     data.p = p;
-    data.ray_incoming = ray_incoming;
+    // data.ray_incoming = ray_incoming;
     data.v = -ray_incoming;
     data.normal = normal;
 
     data.material = material;
-    data.alpha_x = material.roughness * material.roughness;
-    //data.alpha_x = material.roughness;
+    //data.alpha_x = material.roughness * material.roughness;
+    data.alpha_x = material.roughness;
     data.alpha_y = data.alpha_x;
     
     data.diffuse_reflectance = material.albedo * (1.0 - material.metallic);
 
     data.ndotv = dot(data.normal, data.v);
 
-    data.f0 = mix(material.specular * vec3<f32>(0.08, 0.08, 0.08), material.albedo, material.metallic);
+    data.f0 = mix(vec3<f32>(F90), material.albedo, material.metallic);
     data.f_schlick = mix(data.f0, vec3<f32>(1.0, 1.0, 1.0), pow(1.0 - data.ndotv, 5.0));
 
     return data;
@@ -376,45 +380,101 @@ fn disney_brdf(
 
     var color: vec3<f32>;
     var pdf: f32;
-    if u > p_specular {
-        data.ray_outgoing = rand_in_cosine_weighted_hemisphere(data.normal);
+    // if u == 0 {//> p_specular {
+    //     data.ray_outgoing = rand_in_cosine_weighted_hemisphere(data.normal);
 
-        data.h = data.ray_outgoing + data.v;
+    //     data.h = data.ray_outgoing + data.v;
 
-        data.ndotl = dot(data.normal, data.ray_outgoing);
-        data.ldoth = dot(data.ray_outgoing, data.h);
-        data.ndoth = dot(data.normal, data.h);    
-        data.vdoth = dot(data.v, data.h);
+    //     data.ndotl = dot(data.normal, data.ray_outgoing);
+    //     data.ldoth = dot(data.ray_outgoing, data.h);
+    //     data.ndoth = dot(data.normal, data.h);    
+    //     data.vdoth = dot(data.v, data.h);
 
-        //color = diffuse_reflectance * diffuse(p, v, ray_outgoing, normal, material);
-        color = data.diffuse_reflectance * diffuse(data) * (1.0 - data.f_schlick);
+    //     //color = diffuse_reflectance * diffuse(p, v, ray_outgoing, normal, material);
+    //     color = data.diffuse_reflectance * diffuse(data) * (1.0 - data.f_schlick);
 
-        pdf = (1.0 - p_specular);
-    } else {
-        //data.h = ggx_sample_microfacet_normal(data.alpha_x, data.normal, data.v);
-        data.h = ggx_sample_microfacet_normal(data);
+    //     pdf = (1.0 - p_specular);
+    // } else {
+    //     //data.h = ggx_sample_microfacet_normal(data.alpha_x, data.normal, data.v);
+    //     data.h = ggx_sample_microfacet_normal(data);
         
-        data.ray_outgoing = -reflect(data.v, data.h);
+    //     data.ray_outgoing = -reflect(data.v, data.h);
 
-        data.ndotl = dot(data.normal, data.ray_outgoing);
-        data.ldoth = dot(data.ray_outgoing, data.h);
-        data.ndoth = dot(data.normal, data.h);    
-        data.vdoth = dot(data.v, data.h);
+    //     data.ndotl = dot(data.normal, data.ray_outgoing);
+    //     data.ldoth = dot(data.ray_outgoing, data.h);
+    //     data.ndoth = dot(data.normal, data.h);    
+    //     data.vdoth = dot(data.v, data.h);
 
-        //color = specular(v, ray_outgoing, sqrt(1.0 - f_schlick), normal, h, material);
-        color = specular(data);
+    //     //color = specular(v, ray_outgoing, sqrt(1.0 - f_schlick), normal, h, material);
+    //     color = specular(data);
 
-        //color *= ggx_sample_pdf(material.roughness * material.roughness, normal, v + ray_outgoing, v);
+    //     //color *= ggx_sample_pdf(material.roughness * material.roughness, normal, v + ray_outgoing, v);
 
-        //pdf = ggx_sample_pdf(material.roughness * material.roughness, normal, h, v);
-        pdf = ggx_sample_pdf(data);
-        //pdf = 1.0;
-    }
+    //     //pdf = ggx_sample_pdf(material.roughness * material.roughness, normal, h, v);
+    //     pdf = ggx_sample_pdf(data);
+    //     //pdf = 1.0;
+    // }
     
+    data.h = ggx_sample_microfacet_normal(data);
+    
+    data.ray_outgoing = -reflect(data.v, data.h);
+
+    data.ndotl = dot(data.normal, data.ray_outgoing);
+    data.ldoth = dot(data.ray_outgoing, data.h);
+    data.ndoth = dot(data.normal, data.h);    
+    data.vdoth = dot(data.v, data.h);
+
+    //color = specular(v, ray_outgoing, sqrt(1.0 - f_schlick), normal, h, material);
+    color = specular(data) + (data.diffuse_reflectance * diffuse(data) * (1.0 - data.f_schlick));
+    //color = diffuse(data) * data.diffuse_reflectance;
+
+    //color *= ggx_sample_pdf(material.roughness * material.roughness, normal, v + ray_outgoing, v);
+
+    //pdf = ggx_sample_pdf(material.roughness * material.roughness, normal, h, v);
+    pdf = 1.0 / ggx_sample_pdf(data);
+    //pdf = 1.0 / (2.0 * PI);
+
     //color *= dot(v, normal);
     color *= data.ndotv;
 
+    //color = vec3<f32>(data.f_schlick);
+
     //color = vec3<f32>(p_specular);
+
+    let rtn: BRDFResult = BRDFResult(
+        color,
+        pdf,
+        data.ray_outgoing  
+    );
+
+    return rtn;
+}
+
+fn disney_brdf_sample(
+    p: vec3<f32>, 
+    ray_incoming: vec3<f32>, 
+    ray_outgoing: vec3<f32>,
+    normal: vec3<f32>, 
+    material: SampledMaterial
+) -> BRDFResult {
+    var data = prep_data(p, ray_incoming, normal, material);
+    data.ray_outgoing = ray_outgoing;
+
+    let u = rand_float();
+
+    var color: vec3<f32>;
+    var pdf: f32;
+    
+    data.h = data.ray_outgoing + data.v;
+
+    data.ndotl = dot(data.normal, data.ray_outgoing);
+    data.ldoth = dot(data.ray_outgoing, data.h);
+    data.ndoth = dot(data.normal, data.h);    
+    data.vdoth = dot(data.v, data.h);
+
+    color = data.diffuse_reflectance * diffuse(data) * (1.0 - data.f_schlick);// + specular(data);
+
+    pdf = ggx_sample_pdf(data);
 
     let rtn: BRDFResult = BRDFResult(
         color,
