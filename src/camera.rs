@@ -1,5 +1,4 @@
 use glam::Vec3;
-use winit::dpi::PhysicalSize;
 
 use crate::shaders::shader_definitions;
 
@@ -29,10 +28,10 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn new(size: PhysicalSize<u32>, fov: f32, position: Vec3) -> Self {
+    pub fn new(size: (u32, u32), fov: f32, position: Vec3) -> Self {
         let mut cam = Self {
-            width: size.width,
-            height: size.height,
+            width: size.0,
+            height: size.1,
             fov,
             position,
             lookat: position + Vec3::new(0.0, 0.0, 1.0),
@@ -43,7 +42,7 @@ impl Camera {
             first_pixel_pos: Vec3::new(0.0, 0.0, 0.0),
             theta_x: 0.0,
             theta_y: 0.0,
-            camera_speed: 10.0,
+            camera_speed: 1.0,
             frame: 0
         };
 

@@ -34,8 +34,6 @@ pub fn create_shader_compute(state: &wgpu_util::WGPUState, device: &wgpu::Device
         ).unwrap()
         .write().unwrap();
 
-    println!("{}", new_source);
-
     let spirv = jit_spirv::jit_spirv!(
         &new_source,
         glsl,

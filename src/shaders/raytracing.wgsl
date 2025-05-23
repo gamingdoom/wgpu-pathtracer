@@ -73,14 +73,14 @@ fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
        verts[1] = vertices[indices[instance_infos[rq_intersection.instance_index].index_offset + rq_intersection.geometry_index * 3 + 1]];
        verts[2] = vertices[indices[instance_infos[rq_intersection.instance_index].index_offset + rq_intersection.geometry_index * 3 + 2]];
 
-       if equals(verts[0].normal, vec3<f32>(0.0, 0.0, 0.0)) {
-            // calcualte normals
-            // normalize(cross(v1 - v0, v2 - v0))
-            let normal = normalize(cross(verts[1].position - verts[0].position, verts[2].position - verts[0].position));
-            verts[0].normal = normal;
-            verts[1].normal = normal;
-            verts[2].normal = normal;
-       }
+    //    if equals(verts[0].normal, vec3<f32>(0.0, 0.0, 0.0)) {
+    //         // calcualte normals
+    //         // normalize(cross(v1 - v0, v2 - v0))
+    //         let normal = normalize(cross(verts[1].position - verts[0].position, verts[2].position - verts[0].position));
+    //         verts[0].normal = normal;
+    //         verts[1].normal = normal;
+    //         verts[2].normal = normal;
+    //    }
     }
 
     let w = 1.0 - rq_intersection.barycentrics.x - rq_intersection.barycentrics.y;
@@ -94,10 +94,10 @@ fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
     let material = sample_material(materials[rq_intersection.instance_custom_data], uv);
 
     let emissive = material.emissive;
-    var hit_light = false;
-    if emissive.x > 0.0 || emissive.y > 0.0 || emissive.z > 0.0 {
-        hit_light = true; 
-    }
+    var hit_light = bool(dot(ceil(emissive), vec3<f32>(1.0)));
+    // if emissive.x > 0.0 || emissive.y > 0.0 || emissive.z > 0.0 {
+    //     hit_light = true; 
+    // }
 
     var intersection: RayIntersectionCustom = RayIntersectionCustom(
         rq_intersection,
@@ -114,11 +114,11 @@ fn trace_ray(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
 fn cosine_pdf(ro_i: vec3<f32>, rd_i: vec3<f32>, scattered: ScatteredRay) -> f32 {
     let cos_theta = dot(normalize(scattered.normal), normalize(scattered.direction));
 
-    if (cos_theta < 0.0) {
-        return 0.0;
-    }
+    // if (cos_theta < 0.0) {
+    //     return 0.0;
+    // }
 
-    return cos_theta;
+    return max(0.0, cos_theta);
 
     // var n = cross(tri.v1 - tri.v0, tri.v2 - tri.v0);
 
@@ -217,10 +217,7 @@ fn light_scatter(ro: vec3<f32>, rd: vec3<f32>, tri: Triangle, intersection: RayI
     var to_p_dir = normalize(to_point - p);
 
     // if light is behind triangle, then it will not be a hit
-    var should_hit = true;
-    if dot(to_p_dir, n) < 0.0 {
-        should_hit = false;
-    }
+    var should_hit = dot(to_p_dir, n) > 0.0;
 
     let scattered: ScatteredRay = ScatteredRay(
         p,
@@ -246,10 +243,10 @@ fn scatter(ro: vec3<f32>, rd: vec3<f32>, intersection: RayIntersectionCustom) ->
     //var n = normalize(cross(v1 - v0, v2 - v0));
     
     var n = normalize((v0.normal * intersection.uvw.x + v1.normal * intersection.uvw.y + v2.normal * intersection.uvw.z));
-    //n = faceForward(-n, n, rd);
-    if dot(n, -rd) < 0.0 {
-        n *= -1.0;
-    }
+    n = faceForward(n, n, rd);
+    // if dot(n, -rd) < 0.0 {
+    //     n *= -1.0;
+    // }
 
     // if dot(rd, n) < 0.0 {
     //     n *= -1.0;
@@ -379,8 +376,6 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
         let intersection: RayIntersectionCustom = trace_ray(curr_ro, curr_rd, acc_struct);
 
         if intersection.ri.kind != RAY_QUERY_INTERSECTION_NONE {
-            let light = lights[rand_int() % uniforms.num_lights];
-
             if i == 0u {
                 first_t = intersection.ri.t;
             }
@@ -401,6 +396,7 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
                 // scattered_pdf = 1.0;
                 // importance = Fraction(1.0, 1.0);//Fraction(1.0, 2.0 * PI);
             } else {
+                let light = lights[rand_int() % uniforms.num_lights];
                 let sent_ray = send_ray_to_light(curr_ro, curr_rd, intersection, light);
                 scattered = sent_ray.scattered;
                 scattered_pdf = sent_ray.scattered_pdf;

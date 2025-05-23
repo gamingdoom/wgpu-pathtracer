@@ -8,10 +8,11 @@ use wgpu::{AccelerationStructureFlags, AccelerationStructureUpdateMode, BlasBuil
 
 use ash::vk;
 
-use winit::window::Window;
-use winit::event::{WindowEvent};
+// use winit::window::Window;
+// use winit::event::{WindowEvent};
 
 use crate::wgpu_buffer::{UniformBuffer, BufferType};
+use crate::window;
 
 pub struct WGPUState <'a> {
     pub adapter: wgpu::Adapter,
@@ -27,16 +28,18 @@ pub struct WGPUState <'a> {
     pub depth_texture: wgpu::Texture,
     pub depth_texture_rt_view: wgpu::TextureView,
     // pub tlas_package: TlasPackage,
-    pub size: winit::dpi::PhysicalSize<u32>,
-    pub window: &'a Window,
+    pub size: (u32, u32),
+    pub window: &'a sdl3::video::Window,
+    pub sdl_context: &'a sdl3::Sdl,
     pub rt_device: wgpu::Device,
     pub rt_queue: wgpu::Queue,
-    pub window_cursor_grabbed: bool
+    pub window_cursor_grabbed: bool,
+    pub refresh_rate: f32,
 }
 
 impl<'a> WGPUState<'a>{
-    pub fn new(window: &'a Window) -> WGPUState<'a> {
-        let size = window.inner_size();
+    pub fn new(sdl_context: &'a sdl3::Sdl, window: &'a sdl3::video::Window) -> WGPUState<'a> {
+        let size = window.size();
 
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN, 
@@ -44,7 +47,7 @@ impl<'a> WGPUState<'a>{
             ..Default::default()
         });
 
-        let surface = instance.create_surface(window).unwrap();
+        let surface = crate::window::create_surface::create_surface(&instance, &window).unwrap();
 
         let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
             power_preference: wgpu::PowerPreference::default(),
@@ -91,7 +94,7 @@ impl<'a> WGPUState<'a>{
 
         let mut queue_create_info = vk::DeviceQueueCreateInfo::default()
             .queue_family_index(family_idx as u32)
-            .queue_priorities(&[0.5f32, 1.0f32]);
+            .queue_priorities(&[1.0f32, 0.0f32]);
         queue_create_info.queue_count = 2;
 
         let ext_ptr = &extensions.iter()
@@ -153,6 +156,7 @@ impl<'a> WGPUState<'a>{
                 max_binding_array_sampler_elements_per_shader_stage: 1000,
                 max_buffer_size: 1024 * 1024 * 1024,
                 max_storage_buffer_binding_size: 1024 * 1024 * 1024,
+                max_compute_invocations_per_workgroup: 1024,
                 ..Default::default()
             },
             memory_hints: wgpu::MemoryHints::Performance,
@@ -167,6 +171,7 @@ impl<'a> WGPUState<'a>{
                 max_binding_array_sampler_elements_per_shader_stage: 1000,
                 max_buffer_size: 1024 * 1024 * 1024,
                 max_storage_buffer_binding_size: 1024 * 1024 * 1024,
+                max_compute_invocations_per_workgroup: 1024,
                 ..Default::default()
             },
             memory_hints: wgpu::MemoryHints::Performance,
@@ -178,7 +183,7 @@ impl<'a> WGPUState<'a>{
             device_2.start_graphics_debugger_capture();
         }
 
-        return Self::resize(device, device_2, queue, queue_2, adapter, surface, window, size);
+        return Self::resize(device, device_2, queue, queue_2, adapter, surface, window, sdl_context, size);
 
         // let (device, queue) = adapter.request_device(&wgpu::DeviceDescriptor {
         //         required_features: 
@@ -205,7 +210,7 @@ impl<'a> WGPUState<'a>{
 
     }
 
-    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, adapter: wgpu::Adapter, surface: wgpu::Surface<'a>, window: &'a Window, size: winit::dpi::PhysicalSize<u32>) -> WGPUState<'a> {
+    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, adapter: wgpu::Adapter, surface: wgpu::Surface<'a>, window: &'a sdl3::video::Window, sdl_context: &'a sdl3::Sdl, size: (u32, u32)) -> WGPUState<'a> {
         let surface_caps = surface.get_capabilities(&adapter);
         let surface_format = surface_caps.formats.iter()
             .find(|f| f.is_srgb())
@@ -215,9 +220,10 @@ impl<'a> WGPUState<'a>{
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,
-            width: size.width,
-            height: size.height,
-            present_mode: surface_caps.present_modes[0],
+            width: size.0,
+            height: size.1,
+            //present_mode: surface_caps.present_modes[0],
+            present_mode: wgpu::PresentMode::AutoNoVsync,
             alpha_mode: surface_caps.alpha_modes[0],
             view_formats: vec![],
             desired_maximum_frame_latency: 2,
@@ -285,6 +291,8 @@ impl<'a> WGPUState<'a>{
             )),
             depth_tex_desc
         ) };
+
+        let refresh_rate = 1.0 / ((window.get_display().unwrap().get_mode().unwrap().refresh_rate));
                 
         Self {
             adapter,
@@ -297,9 +305,11 @@ impl<'a> WGPUState<'a>{
             depth_texture_rt_view: depth_tex_rt.create_view(&wgpu::TextureViewDescriptor::default()),
             size,
             window,
+            sdl_context,
             rt_device: device_2,
             rt_queue: rt_queue,
             window_cursor_grabbed: false,
+            refresh_rate
         }
     }
 
@@ -401,9 +411,10 @@ impl<'a> WGPUState<'a>{
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,
-            width: self.size.width,
-            height: self.size.height,
-            present_mode: surface_caps.present_modes[0],
+            width: self.size.0,
+            height: self.size.1,
+            present_mode: wgpu::PresentMode::AutoNoVsync,
+            //present_mode: surface_caps.present_modes[0],
             alpha_mode: surface_caps.alpha_modes[0],
             view_formats: vec![],
             desired_maximum_frame_latency: 2,
@@ -476,9 +487,11 @@ impl<'a> WGPUState<'a>{
         self.depth_texture = depth_tex;
         self.depth_texture_rt_view = depth_tex_rt.create_view(&wgpu::TextureViewDescriptor::default());
 
+        self.refresh_rate = 1.0 / ((self.window.get_display().unwrap().get_mode().unwrap().refresh_rate));
+
     }
 
-    pub fn window(&self) -> &Window {
+    pub fn window(&self) -> &sdl3::video::Window {
         &self.window
     }
 }

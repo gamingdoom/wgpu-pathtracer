@@ -14,7 +14,6 @@ log = "0.4.27"
 pollster = "0.4.0"
 tobj = "4.0.3"
 wgpu = { version = "25.0.0", features = ["spirv", "glsl"] }
-winit = { version = "0.29", features = ["rwh_05"] }
 wgsl_preprocessor = { path = "./wgsl_preprocessor" }
 image = "0.25.6"
 ash = "0.38.0"
@@ -23,6 +22,7 @@ wgpu-profiler = "0.23.0"
 profiling = "1.0.16"
 inline-spirv = "0.2.1"
 jit-spirv = "0.1.1"
+sdl3 = { version = "0.14.27", features = ["raw-window-handle"] }
 
 [build-dependencies]
 wgsl_preprocessor = { path = "./wgsl_preprocessor" }

@@ -194,21 +194,21 @@ impl Scene {
                 );
             }
 
-            // // Compute normals if not present
-            // if mesh.normals.len() == 0 {
-            //     for indices in mesh.indices.chunks(3) {
-            //         // normalize(cross(v1 - v0, v2 - v0))
-            //         let v0 = Vec3::from_slice(&self.vertices[indices[0] as usize].position);
-            //         let v1 = Vec3::from_slice(&self.vertices[indices[1] as usize].position);
-            //         let v2 = Vec3::from_slice(&self.vertices[indices[2] as usize].position);
+            // Compute normals if not present
+            if mesh.normals.len() == 0 {
+                for indices in mesh.indices.chunks(3) {
+                    // normalize(cross(v1 - v0, v2 - v0))
+                    let v0 = Vec3::from_slice(&self.vertices[indices[0] as usize].position);
+                    let v1 = Vec3::from_slice(&self.vertices[indices[1] as usize].position);
+                    let v2 = Vec3::from_slice(&self.vertices[indices[2] as usize].position);
 
-            //         let normal = (v1 - v0).cross(v2 - v0).normalize().into();
+                    let normal = (v1 - v0).cross(v2 - v0).normalize().into();
 
-            //         self.vertices[indices[0] as usize].normal = normal;
-            //         self.vertices[indices[1] as usize].normal = normal;
-            //         self.vertices[indices[2] as usize].normal = normal;
-            //     }
-            // }
+                    self.vertices[indices[0] as usize].normal = normal;
+                    self.vertices[indices[1] as usize].normal = normal;
+                    self.vertices[indices[2] as usize].normal = normal;
+                }
+            }
 
             let mut scene_mesh = Mesh {
                 //vertices: Vec::new(),

@@ -19,6 +19,9 @@ pub struct RayprojectStep {
 
     pub latest_real_frame: wgpu::Texture,
     pub latest_real_frame_rt: wgpu::Texture,
+
+    time_of_last_rayproject: std::time::Instant,
+
 }
 
 impl RayprojectStep {
@@ -151,6 +154,7 @@ impl RenderStep for RayprojectStep {
             bind_groups: Vec::new(),
             latest_real_frame,
             latest_real_frame_rt,
+            time_of_last_rayproject: std::time::Instant::now(),
         }
     }
 
@@ -200,6 +204,10 @@ impl RenderStep for RayprojectStep {
         let mut is_prev_done = state.device.poll(PollType::Poll).unwrap().is_queue_empty();
 
         while !is_prev_done {
+            // if self.time_of_last_rayproject.elapsed().as_secs_f32() < state.refresh_rate {
+            //     std::thread::sleep((self.time_of_last_rayproject + std::time::Duration::from_secs_f32(state.refresh_rate)) - std::time::Instant::now());
+            // }
+
             is_prev_done = state.device.poll(PollType::Poll).unwrap().is_queue_empty();
 
             if is_prev_done {
@@ -228,7 +236,10 @@ impl RenderStep for RayprojectStep {
             }
     
             let idx = state.pp_queue.submit(Some(encoder.finish()));
+
             state.device.poll(PollType::WaitForSubmissionIndex(idx)).unwrap();
+
+            // self.time_of_last_rayproject = std::time::Instant::now();
         }
 
         // copy the result to the prev_frame

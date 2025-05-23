@@ -1,14 +1,16 @@
 use std::iter;
 
 use glam::{Mat4, Vec3};
+use sdl3::event::Event;
+use sdl3::keyboard::Keycode;
 use wgpu::wgc::api::Vulkan;
 use wgpu::CommandEncoder;
 use wgpu::PollType;
 use wgpu::SurfaceTexture;
 use wgpu::TlasInstance;
-use winit::keyboard::KeyCode;
-use winit::keyboard::PhysicalKey;
-use winit::window::CursorGrabMode;
+// use winit::keyboard::KeyCode;
+// use winit::keyboard::PhysicalKey;
+// use winit::window::CursorGrabMode;
 
 use ash::vk;
 
@@ -36,7 +38,7 @@ pub struct Raytracer<'a> {
 impl<'a> Raytracer<'a> {
     pub fn new(mut wgpu_state: wgpu_util::WGPUState<'a>) -> Raytracer<'a> {
         let camera = camera::Camera::new(
-            wgpu_state.window().inner_size(),
+            wgpu_state.window().size(),
             60.0,
             Vec3::new(0.0, 0.0, 0.0),
         );
@@ -169,8 +171,8 @@ impl<'a> Raytracer<'a> {
     }
 
     pub fn update(&mut self) {
-        self.scene.camera.width = self.wgpu_state.size.width;
-        self.scene.camera.height = self.wgpu_state.size.height;
+        self.scene.camera.width = self.wgpu_state.size.0;
+        self.scene.camera.height = self.wgpu_state.size.1;
         self.scene.camera.update();
 
         if self.wgpu_state.window_cursor_grabbed {
@@ -180,9 +182,11 @@ impl<'a> Raytracer<'a> {
             
         }
 
+
+
         self.rayproject_render_step.update(&mut self.wgpu_state, &self.scene);
         
-        let output = self.wgpu_state.surface.get_current_texture().unwrap();
+        let Ok(output) = self.wgpu_state.surface.get_current_texture() else {return};
 
         let mut encoder = self.wgpu_state.device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Blit, Rayproject Encoder") });
 
@@ -194,102 +198,88 @@ impl<'a> Raytracer<'a> {
         output.present();
     }
 
-    pub fn input(&mut self, event: &winit::event::WindowEvent) -> bool {
+    pub fn input(&mut self, event: &Event) -> bool {
         match event {
-            winit::event::WindowEvent::KeyboardInput {event, ..} => {
-
-                if event.state == winit::event::ElementState::Released {
-                    return false;
-                }
-
-                let pkey = event.physical_key;
-                match pkey {
-                    PhysicalKey::Code(KeyCode::KeyW) => {
+            Event::KeyDown { keycode, .. } => {
+                match keycode {
+                    Some(Keycode::W) => {
                         let camera_dir = (self.scene.camera.position - self.scene.camera.lookat).normalize();
                         self.scene.camera.position += -camera_dir * self.scene.camera.camera_speed;
                         self.scene.camera.lookat += -camera_dir * self.scene.camera.camera_speed;
 
                         return true;
                     },
-                    PhysicalKey::Code(KeyCode::KeyS) => {
+                    Some(Keycode::S) => {
                         let camera_dir = (self.scene.camera.position - self.scene.camera.lookat).normalize();
                         self.scene.camera.position += camera_dir * self.scene.camera.camera_speed;
                         self.scene.camera.lookat += camera_dir * self.scene.camera.camera_speed;
 
                         return true;
                     },
-                    PhysicalKey::Code(KeyCode::KeyQ) => {
+                    Some(Keycode::Q) => {
                         self.scene.camera.position[1] -= self.scene.camera.camera_speed;
                         self.scene.camera.lookat[1] -= self.scene.camera.camera_speed;
 
                         return true;
                     },
-                    PhysicalKey::Code(KeyCode::KeyE) => {
+                    Some(Keycode::E) => {
                         self.scene.camera.position[1] += self.scene.camera.camera_speed;
                         self.scene.camera.lookat[1] += self.scene.camera.camera_speed;
 
                         return true;
                     },
-                    // PhysicalKey::Code(KeyCode::KeyR) => {
-                    //     self.wgpu_state.resize(self.wgpu_state.size);
-                    //     self.scene.camera.frame = 0;
-
-                    //     return true;
-                    // }
-                    PhysicalKey::Code(KeyCode::Space) => {
+                    Some(Keycode::Space) => {
                         self.wgpu_state.window_cursor_grabbed = !self.wgpu_state.window_cursor_grabbed;
-                        let mode = if self.wgpu_state.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
-                        self.wgpu_state.window.set_cursor_grab(mode).unwrap();
+                        // let mode = if self.wgpu_state.window_cursor_grabbed { CursorGrabMode::Confined } else { CursorGrabMode::None };
+                        // self.wgpu_state.window.set_cursor_grab(mode).unwrap();
+
+                        self.wgpu_state.sdl_context.mouse().set_relative_mouse_mode(self.wgpu_state.window, self.wgpu_state.window_cursor_grabbed);
+
                         //self.scene.camera.frame = 0;
 
                         return true;
-                    }
-                    _ => {}
-                }
-            },
-            winit::event::WindowEvent::CursorMoved { position, .. } => {
-                if self.wgpu_state.window_cursor_grabbed {
-                    if position.x != self.wgpu_state.config.width as f64 / 2.0 || position.y != self.wgpu_state.config.height as f64 / 2.0 {
-                        //if (theta_x + event.motion.xrel * 0.01f < M_PI/2.0f && theta_x + event.motion.xrel * 0.01f > -M_PI/2.0f) {
-                        self.scene.camera.theta_x += (position.x - self.wgpu_state.config.width as f64 / 2.0).atan() as f32 * 0.0025;
-                        //}
-                        if self.scene.camera.theta_y - (position.y - self.wgpu_state.config.height as f64 / 2.0).atan() as f32 * 0.01 < std::f32::consts::PI/2.0 && self.scene.camera.theta_y - (position.y - self.wgpu_state.config.height as f64 / 2.0).atan() as f32 * 0.01 > -std::f32::consts::PI/2.0 {
-                            self.scene.camera.theta_y -= (position.y - self.wgpu_state.config.height as f64 / 2.0).atan() as f32 * 0.0025;
-                        }
-
-                        self.wgpu_state.window.set_cursor_position(winit::dpi::PhysicalPosition::new(self.wgpu_state.config.width as f64 / 2.0, self.wgpu_state.config.height as f64 / 2.0)).unwrap();
-
-                        return true
-                    }
-                }
-            },
-            winit::event::WindowEvent::MouseWheel { delta, .. } => {
-                match delta {
-                    winit::event::MouseScrollDelta::LineDelta(_, y) => {
-                        if *y < 0.0 && self.scene.camera.camera_speed == 0.0 {
-                            return false;
-                        }
-                        self.scene.camera.camera_speed += y;
-                        return true;
                     },
-                    _ => {}
+                    _ => {
+                        return false;
+                    }
                 }
             },
-            _ => {}
+            Event::MouseMotion { xrel, yrel, .. } => {
+                if self.wgpu_state.window_cursor_grabbed {
+                    self.scene.camera.theta_x += xrel * 0.0025;
+
+                    if self.scene.camera.theta_y - yrel * 0.0025 < std::f32::consts::PI/2.0 && self.scene.camera.theta_y - yrel * 0.0025 > -std::f32::consts::PI/2.0 {
+                        self.scene.camera.theta_y -= yrel * 0.0025;
+                    }
+
+                    return true
+                }
+            },
+            Event::MouseWheel { y, .. } => {
+                let amount = y * 0.1;
+                if self.scene.camera.camera_speed + amount <= 0.0 {
+                    return false;
+                }
+                self.scene.camera.camera_speed += amount;
+                return true;
+            },
+            _ => {
+                return false;
+            }
         };
 
         false
     }
 
-    pub fn resize(&mut self, size: winit::dpi::PhysicalSize<u32>) {
-        if size.width > 0 && size.height > 0 { //&& self.wgpu_state.size != size {
+    pub fn resize(&mut self, size: (u32, u32)) {
+        if size.0 > 0 && size.1 > 0 { //&& self.wgpu_state.size != size {
             // wait queues
             self.wgpu_state.rt_device.poll(PollType::Wait).unwrap();
             self.wgpu_state.device.poll(PollType::Wait).unwrap();
 
             self.wgpu_state.size = size;
-            self.wgpu_state.config.width = size.width;
-            self.wgpu_state.config.height = size.height;
+            self.wgpu_state.config.width = size.0;
+            self.wgpu_state.config.height = size.1;
 
             let latest_real_frame_desc = &wgpu::TextureDescriptor {
                 label: Some("prev_frame"),
