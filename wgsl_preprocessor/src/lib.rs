@@ -7,11 +7,13 @@ macro_rules !preprocess_wgsl {
 
         let f = exec_path.parent().unwrap().join($file).display().to_string();
 
+        let p = std::path::Path::new(&f).parent().unwrap().display();
+
         println!("Preprocessing {}.", f);
 
         let output = std::process::Command::new("sh")
             .arg("-c")
-            .arg(format!("cat {} | sed 's/\\/\\/!//g' - | cpp -P -I{} -", f, std::path::Path::new(&f).parent().unwrap().display()))
+            .arg(format!("cat {} | sed 's/\\/\\/!//g' - | cpp -P -I{} -", f, p))
             .output()
             .expect("Failed to Execute Preprocessor (are deps installed?)");
 

@@ -15,6 +15,7 @@ use crate::wgpu_buffer::{UniformBuffer, BufferType};
 use crate::window;
 
 pub struct WGPUState <'a> {
+    pub instance: ash::Instance,
     pub adapter: wgpu::Adapter,
     pub surface: wgpu::Surface<'a>,
     pub device: wgpu::Device,
@@ -35,6 +36,8 @@ pub struct WGPUState <'a> {
     pub rt_queue: wgpu::Queue,
     pub window_cursor_grabbed: bool,
     pub refresh_rate: f32,
+
+    pub oidn_device: oidn::Device,
 }
 
 impl<'a> WGPUState<'a>{
@@ -43,7 +46,7 @@ impl<'a> WGPUState<'a>{
 
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN, 
-            flags: wgpu::InstanceFlags::DEBUG,
+            flags: wgpu::InstanceFlags::empty(),
             ..Default::default()
         });
 
@@ -79,7 +82,13 @@ impl<'a> WGPUState<'a>{
         )})};
 
         // extensions.push(c"VK_EXT_acquire_drm_display");
-        // extensions.push(c"VK_EXT_external_memory_dma_buf");
+
+        #[cfg(target_os = "linux")]
+            extensions.push(c"VK_KHR_external_memory_fd");
+            extensions.push(c"VK_EXT_external_memory_dma_buf");
+        
+        #[cfg(target_os = "windows")]
+            extensions.push(c"VK_KHR_external_memory_win32");
 
         // Get queue families
         let queue_fam_props = unsafe { vk_instance.get_physical_device_queue_family_properties(vk_physdev) };
@@ -156,7 +165,7 @@ impl<'a> WGPUState<'a>{
                 max_binding_array_sampler_elements_per_shader_stage: 1000,
                 max_buffer_size: 1024 * 1024 * 1024,
                 max_storage_buffer_binding_size: 1024 * 1024 * 1024,
-                max_compute_invocations_per_workgroup: 1024,
+                max_compute_invocations_per_workgroup: 4096,
                 ..Default::default()
             },
             memory_hints: wgpu::MemoryHints::Performance,
@@ -171,7 +180,7 @@ impl<'a> WGPUState<'a>{
                 max_binding_array_sampler_elements_per_shader_stage: 1000,
                 max_buffer_size: 1024 * 1024 * 1024,
                 max_storage_buffer_binding_size: 1024 * 1024 * 1024,
-                max_compute_invocations_per_workgroup: 1024,
+                max_compute_invocations_per_workgroup: 4096,
                 ..Default::default()
             },
             memory_hints: wgpu::MemoryHints::Performance,
@@ -183,7 +192,7 @@ impl<'a> WGPUState<'a>{
             device_2.start_graphics_debugger_capture();
         }
 
-        return Self::resize(device, device_2, queue, queue_2, adapter, surface, window, sdl_context, size);
+        return Self::resize(device, device_2, queue, queue_2, vk_instance, adapter, surface, window, sdl_context, size);
 
         // let (device, queue) = adapter.request_device(&wgpu::DeviceDescriptor {
         //         required_features: 
@@ -210,7 +219,7 @@ impl<'a> WGPUState<'a>{
 
     }
 
-    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, adapter: wgpu::Adapter, surface: wgpu::Surface<'a>, window: &'a sdl3::video::Window, sdl_context: &'a sdl3::Sdl, size: (u32, u32)) -> WGPUState<'a> {
+    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, instance: &ash::Instance, adapter: wgpu::Adapter, surface: wgpu::Surface<'a>, window: &'a sdl3::video::Window, sdl_context: &'a sdl3::Sdl, size: (u32, u32)) -> WGPUState<'a> {
         let surface_caps = surface.get_capabilities(&adapter);
         let surface_format = surface_caps.formats.iter()
             .find(|f| f.is_srgb())
@@ -293,8 +302,11 @@ impl<'a> WGPUState<'a>{
         ) };
 
         let refresh_rate = 1.0 / ((window.get_display().unwrap().get_mode().unwrap().refresh_rate));
+
+        let oidn_dev = oidn::Device::new();
                 
         Self {
+            instance: instance.clone(),
             adapter,
             surface,
             device,
@@ -309,7 +321,8 @@ impl<'a> WGPUState<'a>{
             rt_device: device_2,
             rt_queue: rt_queue,
             window_cursor_grabbed: false,
-            refresh_rate
+            refresh_rate,
+            oidn_device: oidn_dev,
         }
     }
 

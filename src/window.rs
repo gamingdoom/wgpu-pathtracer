@@ -34,8 +34,8 @@ pub fn run() {
             match event {
                 Event::Window {  
                     win_event: 
-                        WindowEvent::PixelSizeChanged(width, height)
-                        | WindowEvent::Resized(width, height),
+                        //WindowEvent::PixelSizeChanged(width, height)
+                        WindowEvent::Resized(width, height),
                     .. 
                 } => {
                     raytracer.resize((width as u32, height as u32));

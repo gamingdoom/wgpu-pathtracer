@@ -4,9 +4,9 @@
 newmtl Antenna_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -20,9 +20,9 @@ map_Bump Textures/Antenna_Metal_Normal.png
 newmtl Antenna_Plastic
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -36,9 +36,9 @@ map_Bump Textures/Antenna_Plastic_Normal.png
 newmtl Antenna_Plastic_Blue
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -52,9 +52,9 @@ map_Bump Textures/Antenna_Plastic_Blue_Normal.png
 newmtl Ashtray
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -68,9 +68,9 @@ map_Bump Textures/Ashtray_Normal.png
 newmtl Awnings_Beams
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -84,9 +84,9 @@ map_Bump Textures/Awnings_Beams_Normal.png
 newmtl Awnings_Fabric
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -100,9 +100,9 @@ map_Bump Textures/Awnings_Fabric_Normal.png
 newmtl Awnings_Hotel_Fabric
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -116,9 +116,9 @@ map_Bump Textures/Awnings_Hotel_Fabric_Normal.png
 newmtl Balcony_Concrete
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -132,9 +132,9 @@ map_Bump Textures/Balcony_Concrete_Normal.png
 newmtl Balcony_Green_Wood
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -148,9 +148,9 @@ map_Bump Textures/Balcony_Green_Wood_Normal.png
 newmtl Balcony_Ornaments
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -164,9 +164,9 @@ map_Bump Textures/Balcony_Ornaments_Normal.png
 newmtl Balcony_Trims
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -180,9 +180,9 @@ map_Bump Textures/Balcony_Trims_Normal.png
 newmtl Banner_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -196,9 +196,9 @@ map_Bump Textures/Banner_Metal_Normal.png
 newmtl Bistro_Sign_Letters
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -212,9 +212,9 @@ map_Bump Textures/Bistro_Sign_Letters_Normal.png
 newmtl Bistro_Sign_Main
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -228,9 +228,9 @@ map_Bump Textures/Bistro_Sign_Main_Normal.png
 newmtl Bollards
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -244,9 +244,9 @@ map_Bump Textures/Bollards_Normal.png
 newmtl Chimneys_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -260,9 +260,9 @@ map_Bump Textures/Chimneys_Metal_Normal.png
 newmtl Cloth
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -276,9 +276,9 @@ map_Bump Textures/Cloth_Normal.png
 newmtl Concrete
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -292,9 +292,9 @@ map_Bump Textures/Concrete_Normal.png
 newmtl Concrete2
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -308,9 +308,9 @@ map_Bump Textures/Concrete2_Normal.png
 newmtl Concrete3
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -324,9 +324,9 @@ map_Bump Textures/Concrete3_Normal.png
 newmtl Concrete_Striped
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -340,9 +340,9 @@ map_Bump Textures/Concrete_Striped_Normal.png
 newmtl CookieJar_Cookies
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -356,9 +356,9 @@ map_Bump Textures/CookieJar_Cookies_Normal.png
 newmtl Cutlery_chrome
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -372,9 +372,9 @@ map_Bump Textures/Cutlery_chrome_Normal.png
 newmtl Cutlery_details
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -388,9 +388,9 @@ map_Bump Textures/Cutlery_details_Normal.png
 newmtl ElectricBox
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -403,9 +403,9 @@ map_Bump Textures/ElectricBox_Normal.png
 
 newmtl Emissive_StreetLight
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -420,9 +420,9 @@ map_Bump Textures/Emissive_StreetLight_Normal.png
 newmtl Foliage_Bux_Hedges46.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -436,9 +436,9 @@ map_Bump Textures/Foliage_Bux_Hedges46_Normal.png
 newmtl Foliage_Flowers.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -452,9 +452,9 @@ map_Bump Textures/Foliage_Flowers_Normal.png
 newmtl Foliage_Ivy_branches
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -468,9 +468,9 @@ map_Bump Textures/Foliage_Ivy_branches_Normal.png
 newmtl Foliage_Ivy_leaf_a.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -484,9 +484,9 @@ map_Bump Textures/Foliage_Ivy_leaf_a_Normal.png
 newmtl Foliage_Leaves.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -500,9 +500,9 @@ map_Bump Textures/Foliage_Leaves_Normal.png
 newmtl Foliage_Linde_Tree_Large_Green_Leaves.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -516,9 +516,9 @@ map_Bump Textures/Foliage_Linde_Tree_Large_Green_Leaves_Normal.png
 newmtl Foliage_Linde_Tree_Large_Orange_Leaves.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -532,9 +532,9 @@ map_Bump Textures/Foliage_Linde_Tree_Large_Orange_Leaves_Normal.png
 newmtl Foliage_Linde_Tree_Large_Trunk
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -548,9 +548,9 @@ map_Bump Textures/Foliage_Linde_Tree_Large_Trunk_Normal.png
 newmtl Foliage_Paris_Flowers
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -564,9 +564,9 @@ map_Bump Textures/Foliage_Paris_Flowers_Normal.png
 newmtl Foliage_Trunk
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -580,9 +580,9 @@ map_Bump Textures/Foliage_Trunk_Normal.png
 newmtl LanternEmissive
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -596,9 +596,9 @@ map_Bump Textures/LanternEmissive_Normal.png
 newmtl MASTER_Awning_Beams
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -612,9 +612,9 @@ map_Bump Textures/MASTER_Awning_Beams_Normal.png
 newmtl MASTER_Awning_Fabric_Cyan
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -628,9 +628,9 @@ map_Bump Textures/MASTER_Awning_Fabric_Cyan_Normal.png
 newmtl MASTER_Awning_Fabric_Red
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -644,9 +644,9 @@ map_Bump Textures/MASTER_Awning_Fabric_Red_Normal.png
 newmtl MASTER_Bistro_Main_Door
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -660,9 +660,9 @@ map_Bump Textures/MASTER_Bistro_Main_Door_Normal.png
 newmtl MASTER_Bistro_Main_Door.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -676,9 +676,9 @@ map_Bump Textures/MASTER_Bistro_Main_Door_Normal.png
 newmtl MASTER_Black_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -692,9 +692,9 @@ map_Bump Textures/MASTER_Black_Metal_Normal.png
 newmtl MASTER_Book_Covers
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -708,9 +708,9 @@ map_Bump Textures/MASTER_Book_Covers_Normal.png
 newmtl MASTER_Boulangerie
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -724,9 +724,9 @@ map_Bump Textures/MASTER_Boulangerie_Normal.png
 newmtl MASTER_Brick_Large_Beige_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -740,9 +740,9 @@ map_Bump Textures/MASTER_Brick_Large_Beige_BLENDSHADER_Normal.png
 newmtl MASTER_Brick_Large_White
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -756,9 +756,9 @@ map_Bump Textures/MASTER_Brick_Large_White_Normal.png
 newmtl MASTER_Brick_Small_Red
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -772,9 +772,9 @@ map_Bump Textures/MASTER_Brick_Small_Red_Normal.png
 newmtl MASTER_Brick_Small_Red_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -788,9 +788,9 @@ map_Bump Textures/MASTER_Brick_Small_Red_BLENDSHADER_Normal.png
 newmtl MASTER_Bronze_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -804,9 +804,9 @@ map_Bump Textures/MASTER_Bronze_BLENDSHADER_Normal.png
 newmtl MASTER_Building_Details
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -820,9 +820,9 @@ map_Bump Textures/MASTER_Building_Details_Normal.png
 newmtl MASTER_Concrete
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -836,9 +836,9 @@ map_Bump Textures/MASTER_Concrete_Normal.png
 newmtl MASTER_Concrete.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -852,9 +852,9 @@ map_Bump Textures/MASTER_Concrete_Normal.png
 newmtl MASTER_Concrete1
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -868,9 +868,9 @@ map_Bump Textures/MASTER_Concrete1_Normal.png
 newmtl MASTER_Concrete1.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -884,9 +884,9 @@ map_Bump Textures/MASTER_Concrete1_Normal.png
 newmtl MASTER_Concrete_Grooved
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -900,9 +900,9 @@ map_Bump Textures/MASTER_Concrete_Grooved_Normal.png
 newmtl MASTER_Concrete_Grooved.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -916,9 +916,9 @@ map_Bump Textures/MASTER_Concrete_Grooved_Normal.png
 newmtl MASTER_Concrete_Plaster
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -932,9 +932,9 @@ map_Bump Textures/MASTER_Concrete_Plaster_Normal.png
 newmtl MASTER_Concrete_Plaster1_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -948,9 +948,9 @@ map_Bump Textures/MASTER_Concrete_Plaster1_BLENDSHADER_Normal.png
 newmtl MASTER_Concrete_Smooth
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -964,9 +964,9 @@ map_Bump Textures/MASTER_Concrete_Smooth_Normal.png
 newmtl MASTER_Concrete_Smooth_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -980,9 +980,9 @@ map_Bump Textures/MASTER_Concrete_Smooth_BLENDSHADER_Normal.png
 newmtl MASTER_Concrete_White
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -996,9 +996,9 @@ map_Bump Textures/MASTER_Concrete_White_Normal.png
 newmtl MASTER_Concrete_Yellow
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1012,9 +1012,9 @@ map_Bump Textures/MASTER_Concrete_Yellow_Normal.png
 newmtl MASTER_Concrete_Yellow.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1028,9 +1028,9 @@ map_Bump Textures/MASTER_Concrete_Yellow_Normal.png
 newmtl MASTER_Curtains
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1044,9 +1044,9 @@ map_Bump Textures/MASTER_Curtains_Normal.png
 newmtl MASTER_Details_Dark
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1060,9 +1060,9 @@ map_Bump Textures/MASTER_Details_Dark_Normal.png
 newmtl MASTER_Doors
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1076,9 +1076,9 @@ map_Bump Textures/MASTER_Doors_Normal.png
 newmtl MASTER_Focus
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1092,9 +1092,9 @@ map_Bump Textures/MASTER_Focus_Normal.png
 newmtl MASTER_Focus_Ornament
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1108,9 +1108,9 @@ map_Bump Textures/MASTER_Focus_Ornament_Normal.png
 newmtl MASTER_Forge_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1124,9 +1124,9 @@ map_Bump Textures/MASTER_Forge_Metal_Normal.png
 newmtl MASTER_Frosted_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1140,9 +1140,9 @@ map_Bump Textures/MASTER_Frosted_Glass_Normal.png
 newmtl MASTER_Glass_Dirty
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1156,9 +1156,9 @@ map_Bump Textures/MASTER_Glass_Dirty_Normal.png
 newmtl MASTER_Glass_Dirty_MASKED
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1172,9 +1172,9 @@ map_Bump Textures/MASTER_Glass_Dirty_MASKED_Normal.png
 newmtl MASTER_Glass_Exterior
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1188,9 +1188,9 @@ map_Bump Textures/MASTER_Glass_Exterior_Normal.png
 newmtl MASTER_Glass_Exterior.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
-Pr 0.552786
-Pm 1.000000
+illum 1
+Pr 0.527000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1204,9 +1204,9 @@ map_Bump Textures/MASTER_Glass_Exterior_Normal.png
 newmtl MASTER_Grain_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1220,9 +1220,9 @@ map_Bump Textures/MASTER_Grain_Metal_Normal.png
 newmtl MASTER_Interior_01_Brushed_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1236,9 +1236,9 @@ map_Bump Textures/MASTER_Interior_01_Brushed_Metal_Normal.png
 newmtl MASTER_Interior_01_Floor_Tile_Hexagonal_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1252,9 +1252,9 @@ map_Bump Textures/MASTER_Interior_01_Floor_Tile_Hexagonal_BLENDSHADER_Normal.png
 newmtl MASTER_Interior_01_Frozen_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1268,9 +1268,9 @@ map_Bump Textures/MASTER_Interior_01_Frozen_Glass_Normal.png
 newmtl MASTER_Interior_01_Grid
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1284,9 +1284,9 @@ map_Bump Textures/MASTER_Interior_01_Grid_Normal.png
 newmtl MASTER_Interior_01_Grid1
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1300,9 +1300,9 @@ map_Bump Textures/MASTER_Interior_01_Grid1_Normal.png
 newmtl MASTER_Interior_01_Material
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1316,9 +1316,9 @@ map_Bump Textures/MASTER_Interior_01_Material_Normal.png
 newmtl MASTER_Interior_01_Paris_Bartrim
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1331,9 +1331,9 @@ map_Bump Textures/MASTER_Interior_01_Paris_Bartrim_Normal.png
 
 newmtl MASTER_Interior_01_Paris_Lantern
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1348,9 +1348,9 @@ map_Bump Textures/MASTER_Interior_01_Paris_Lantern_Normal.png
 newmtl MASTER_Interior_01_Plaster
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1364,9 +1364,9 @@ map_Bump Textures/MASTER_Interior_01_Plaster_Normal.png
 newmtl MASTER_Interior_01_Plaster2
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1380,9 +1380,9 @@ map_Bump Textures/MASTER_Interior_01_Plaster2_Normal.png
 newmtl MASTER_Interior_01_Plaster_Red
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1396,9 +1396,9 @@ map_Bump Textures/MASTER_Interior_01_Plaster_Red_Normal.png
 newmtl MASTER_Interior_01_White_Plastic
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1412,9 +1412,9 @@ map_Bump Textures/MASTER_Interior_01_White_Plastic_Normal.png
 newmtl MASTER_Interior_01_Wood
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1428,9 +1428,9 @@ map_Bump Textures/MASTER_Interior_01_Wood_Normal.png
 newmtl MASTER_Interior_01_Wooden_stuco
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1444,9 +1444,9 @@ map_Bump Textures/MASTER_Interior_01_Wooden_stuco_Normal.png
 newmtl MASTER_Light_Bulb
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1460,9 +1460,9 @@ map_Bump Textures/MASTER_Light_Bulb_Normal.png
 newmtl MASTER_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1476,9 +1476,9 @@ map_Bump Textures/MASTER_Metal_Normal.png
 newmtl MASTER_Metal_Pipe
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1492,9 +1492,9 @@ map_Bump Textures/MASTER_Metal_Pipe_Normal.png
 newmtl MASTER_Plastic
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1508,9 +1508,9 @@ map_Bump Textures/MASTER_Plastic_Normal.png
 newmtl MASTER_Rollup_Door
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1524,9 +1524,9 @@ map_Bump Textures/MASTER_Rollup_Door_Normal.png
 newmtl MASTER_Roofing_Metal_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1540,9 +1540,9 @@ map_Bump Textures/MASTER_Roofing_Metal_01_Normal.png
 newmtl MASTER_Roofing_Shingle_Green
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1556,9 +1556,9 @@ map_Bump Textures/MASTER_Roofing_Shingle_Green_Normal.png
 newmtl MASTER_Roofing_Shingle_Grey
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1572,9 +1572,9 @@ map_Bump Textures/MASTER_Roofing_Shingle_Grey_Normal.png
 newmtl MASTER_Room_Interior
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1588,9 +1588,9 @@ map_Bump Textures/MASTER_Room_Interior_Normal.png
 newmtl MASTER_Side_Letters
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1604,9 +1604,9 @@ map_Bump Textures/MASTER_Side_Letters_Normal.png
 newmtl MASTER_Trim_Cornice
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1620,9 +1620,9 @@ map_Bump Textures/MASTER_Trim_Cornice_Normal.png
 newmtl MASTER_Wood_Brown
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1636,9 +1636,9 @@ map_Bump Textures/MASTER_Wood_Brown_Normal.png
 newmtl MASTER_Wood_Painted3
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1652,9 +1652,9 @@ map_Bump Textures/MASTER_Wood_Painted3_Normal.png
 newmtl MASTER_Wood_Painted3.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1668,9 +1668,9 @@ map_Bump Textures/MASTER_Wood_Painted3_Normal.png
 newmtl MASTER_Wood_Painted3.002
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1684,9 +1684,9 @@ map_Bump Textures/MASTER_Wood_Painted3_Normal.png
 newmtl MASTER_Wood_Painted_Cyan
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1700,9 +1700,9 @@ map_Bump Textures/MASTER_Wood_Painted_Cyan_Normal.png
 newmtl MASTER_Wood_Painted_Green
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1716,9 +1716,9 @@ map_Bump Textures/MASTER_Wood_Painted_Green_Normal.png
 newmtl MASTER_Wood_Painted_Green_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1732,9 +1732,9 @@ map_Bump Textures/MASTER_Wood_Painted_Green_BLENDSHADER_Normal.png
 newmtl MASTER_Wood_Polished
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1748,9 +1748,9 @@ map_Bump Textures/MASTER_Wood_Polished_Normal.png
 newmtl MenuSign_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1764,9 +1764,9 @@ map_Bump Textures/MenuSign_01_Normal.png
 newmtl MenuSign_02_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1780,9 +1780,9 @@ map_Bump Textures/MenuSign_02_Glass_Normal.png
 newmtl MenuSign_02_Mesh
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1796,9 +1796,9 @@ map_Bump Textures/MenuSign_02_Mesh_Normal.png
 newmtl Metal_Bronze_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1812,9 +1812,9 @@ map_Bump Textures/Metal_Bronze_01_Normal.png
 newmtl Metal_Chrome1
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1828,9 +1828,9 @@ map_Bump Textures/Metal_Chrome1_Normal.png
 newmtl Metal_Worn_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1844,9 +1844,9 @@ map_Bump Textures/Metal_Worn_01_Normal.png
 newmtl NapkinHolder
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1860,9 +1860,9 @@ map_Bump Textures/NapkinHolder_Normal.png
 newmtl NapkinHolder_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1876,9 +1876,9 @@ map_Bump Textures/NapkinHolder_01_Normal.png
 newmtl Paris_BarStool
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1892,9 +1892,9 @@ map_Bump Textures/Paris_BarStool_Normal.png
 newmtl Paris_Beertap
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1908,9 +1908,9 @@ map_Bump Textures/Paris_Beertap_Normal.png
 newmtl Paris_Cashregister
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1924,9 +1924,9 @@ map_Bump Textures/Paris_Cashregister_Normal.png
 newmtl Paris_Cashregister_Buttons
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1940,9 +1940,9 @@ map_Bump Textures/Paris_Cashregister_Buttons_Normal.png
 newmtl Paris_Cashregister_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1955,9 +1955,9 @@ map_Bump Textures/Paris_Cashregister_Glass_Normal.png
 
 newmtl Paris_CeilingFan
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1971,9 +1971,9 @@ map_Bump Textures/Paris_CeilingFan_Normal.png
 
 newmtl Paris_Ceiling_Lamp
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -1988,9 +1988,9 @@ map_Bump Textures/Paris_Ceiling_Lamp_Normal.png
 newmtl Paris_Chair_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2004,9 +2004,9 @@ map_Bump Textures/Paris_Chair_01_Normal.png
 newmtl Paris_Coasters_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2020,9 +2020,9 @@ map_Bump Textures/Paris_Coasters_01_Normal.png
 newmtl Paris_Doormat
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2036,9 +2036,9 @@ map_Bump Textures/Paris_Doormat_Normal.png
 newmtl Paris_LiquorBottle_01_Caps
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2052,9 +2052,9 @@ map_Bump Textures/Paris_LiquorBottle_01_Caps_Normal.png
 newmtl Paris_LiquorBottle_01_Caps.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2068,9 +2068,9 @@ map_Bump Textures/Paris_LiquorBottle_01_Caps_Normal.png
 newmtl Paris_LiquorBottle_01_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2084,9 +2084,9 @@ map_Bump Textures/Paris_LiquorBottle_01_Glass_Normal.png
 newmtl Paris_LiquorBottle_01_Glass_Wine
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2100,14 +2100,15 @@ map_Bump Textures/Paris_LiquorBottle_01_Glass_Wine_Normal.png
 newmtl Paris_LiquorBottle_01_Glass_Wine.001
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
-Pr 0.552786
-Pm 1.000000
+illum 1
+Pr 0.010000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
+Tf 1.000000 1.000000 1.000000
 map_Kd Textures/Paris_LiquorBottle_01_Glass_Wine_BaseColor.png
 map_Ks Textures/Paris_LiquorBottle_01_Glass_Wine_Specular.png
 map_d Textures/Paris_LiquorBottle_01_Glass_Wine_BaseColor.png
@@ -2117,24 +2118,24 @@ newmtl Paris_LiquorBottle_01_Labels
 Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+d 1.000000
+illum 2
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
 map_Kd Textures/Paris_LiquorBottle_01_Labels_BaseColor.png
-map_d Textures/Paris_LiquorBottle_01_Labels_BaseColor.png
 map_Bump Textures/Paris_LiquorBottle_01_Labels_Normal.png
 
 newmtl Paris_LiquorBottle_02_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2148,9 +2149,9 @@ map_Bump Textures/Paris_LiquorBottle_02_Glass_Normal.png
 newmtl Paris_LiquorBottle_03_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2164,9 +2165,9 @@ map_Bump Textures/Paris_LiquorBottle_03_Glass_Normal.png
 newmtl Paris_Painting_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2180,9 +2181,9 @@ map_Bump Textures/Paris_Painting_Metal_Normal.png
 newmtl Paris_Paintings
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2196,9 +2197,9 @@ map_Bump Textures/Paris_Paintings_Normal.png
 newmtl Paris_Paintings_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2212,9 +2213,9 @@ map_Bump Textures/Paris_Paintings_Glass_Normal.png
 newmtl Paris_Radiator
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2228,9 +2229,9 @@ map_Bump Textures/Paris_Radiator_Normal.png
 newmtl Paris_StreetPivot
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2244,9 +2245,9 @@ map_Bump Textures/Paris_StreetPivot_Normal.png
 newmtl Paris_StreetSign_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2259,9 +2260,9 @@ map_Bump Textures/Paris_StreetSign_01_Normal.png
 
 newmtl Paris_StringLights_01_Blue_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2275,9 +2276,9 @@ map_Bump Textures/Paris_StringLights_01_Blue_Color_Emissive_Normal.png
 
 newmtl Paris_StringLights_01_Green_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2291,9 +2292,9 @@ map_Bump Textures/Paris_StringLights_01_Green_Color_Emissive_Normal.png
 
 newmtl Paris_StringLights_01_Orange_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2307,9 +2308,9 @@ map_Bump Textures/Paris_StringLights_01_Orange_Color_Emissive_Normal.png
 
 newmtl Paris_StringLights_01_Pink_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2323,9 +2324,9 @@ map_Bump Textures/Paris_StringLights_01_Pink_Color_Emissive_Normal.png
 
 newmtl Paris_StringLights_01_Red_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2340,9 +2341,9 @@ map_Bump Textures/Paris_StringLights_01_Red_Color_Emissive_Normal.png
 newmtl Paris_StringLights_01_White_Color
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2355,9 +2356,9 @@ map_Bump Textures/Paris_StringLights_01_White_Color_Normal.png
 
 newmtl Paris_StringLights_01_White_Color_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2372,9 +2373,9 @@ map_Bump Textures/Paris_StringLights_01_White_Color_Emissive_Normal.png
 newmtl Paris_Table_03
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2388,9 +2389,9 @@ map_Bump Textures/Paris_Table_03_Normal.png
 newmtl Paris_Table_Terrace
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2405,9 +2406,9 @@ newmtl Paris_Table_cloth_01
 Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 2
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2420,9 +2421,9 @@ map_Bump Textures/Paris_Table_cloth_01_Normal.png
 newmtl Paris_TrafficSign_A
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2436,9 +2437,9 @@ map_Bump Textures/Paris_TrafficSign_A_Normal.png
 newmtl Paris_Wall_Bulb_Light
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2451,9 +2452,9 @@ map_Bump Textures/Paris_Wall_Bulb_Light_Normal.png
 
 newmtl Paris_Wall_Light_Interior
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2468,9 +2469,9 @@ map_Bump Textures/Paris_Wall_Light_Interior_Normal.png
 newmtl Pavement_Brick_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2484,9 +2485,9 @@ map_Bump Textures/Pavement_Brick_BLENDSHADER_Normal.png
 newmtl Pavement_Cobble_Leaves_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2500,9 +2501,9 @@ map_Bump Textures/Pavement_Cobble_Leaves_BLENDSHADER_Normal.png
 newmtl Pavement_Cobblestone_01_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2516,9 +2517,9 @@ map_Bump Textures/Pavement_Cobblestone_01_BLENDSHADER_Normal.png
 newmtl Pavement_Cobblestone_02
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2532,9 +2533,9 @@ map_Bump Textures/Pavement_Cobblestone_02_Normal.png
 newmtl Pavement_Cobblestone_Big_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2548,9 +2549,9 @@ map_Bump Textures/Pavement_Cobblestone_Big_BLENDSHADER_Normal.png
 newmtl Pavement_Cobblestone_Small_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2564,9 +2565,9 @@ map_Bump Textures/Pavement_Cobblestone_Small_BLENDSHADER_Normal.png
 newmtl Pavement_Cobblestone_Wet_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2580,9 +2581,9 @@ map_Bump Textures/Pavement_Cobblestone_Wet_BLENDSHADER_Normal.png
 newmtl Pavement_Cobblestone_Wet_Leaves_BLENDSHADER
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2596,9 +2597,9 @@ map_Bump Textures/Pavement_Cobblestone_Wet_Leaves_BLENDSHADER_Normal.png
 newmtl Pavement_Curbstones
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2612,9 +2613,9 @@ map_Bump Textures/Pavement_Curbstones_Normal.png
 newmtl Pavement_Ground_Wet
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2628,9 +2629,9 @@ map_Bump Textures/Pavement_Ground_Wet_Normal.png
 newmtl Pavement_Manhole_Cover
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2644,9 +2645,9 @@ map_Bump Textures/Pavement_Manhole_Cover_Normal.png
 newmtl Plantpots
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2660,9 +2661,9 @@ map_Bump Textures/Plantpots_Normal.png
 newmtl Plants_Metal_Base_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2676,9 +2677,9 @@ map_Bump Textures/Plants_Metal_Base_01_Normal.png
 newmtl Plants_plants.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2692,9 +2693,9 @@ map_Bump Textures/Plants_plants_Normal.png
 newmtl Plaster
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2708,9 +2709,9 @@ map_Bump Textures/Plaster_Normal.png
 newmtl Plastic_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2724,9 +2725,9 @@ map_Bump Textures/Plastic_01_Normal.png
 newmtl Plastic_02
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2740,9 +2741,9 @@ map_Bump Textures/Plastic_02_Normal.png
 newmtl Plates_Ceramic
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2756,9 +2757,9 @@ map_Bump Textures/Plates_Ceramic_Normal.png
 newmtl Plates_Details
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2772,9 +2773,9 @@ map_Bump Textures/Plates_Details_Normal.png
 newmtl Rubber_Bar_Mat_01
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2788,9 +2789,9 @@ map_Bump Textures/Rubber_Bar_Mat_01_Normal.png
 newmtl Shopsign_Bakery
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2803,9 +2804,9 @@ map_Bump Textures/Shopsign_Bakery_Normal.png
 
 newmtl Shopsign_Book_Store_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2819,9 +2820,9 @@ map_Bump Textures/Shopsign_Book_Store_Emissive_Normal.png
 
 newmtl Shopsign_Pharmacy_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2836,9 +2837,9 @@ map_Bump Textures/Shopsign_Pharmacy_Emissive_Normal.png
 newmtl Shopsign_Ties_Shop
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2852,9 +2853,9 @@ map_Bump Textures/Shopsign_Ties_Shop_Normal.png
 newmtl Sidewalkbarrier
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2868,9 +2869,9 @@ map_Bump Textures/Sidewalkbarrier_Normal.png
 newmtl Spotlight_Emissive
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2883,9 +2884,9 @@ map_Bump Textures/Spotlight_Emissive_Normal.png
 
 newmtl Spotlight_Glass_Emissive
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2900,9 +2901,9 @@ map_Bump Textures/Spotlight_Glass_Emissive_Normal.png
 newmtl Spotlight_Main
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2916,9 +2917,9 @@ map_Bump Textures/Spotlight_Main_Normal.png
 newmtl Streetlight_Chains
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2932,9 +2933,9 @@ map_Bump Textures/Streetlight_Chains_Normal.png
 newmtl Streetlight_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2948,9 +2949,9 @@ map_Bump Textures/Streetlight_Metal_Normal.png
 newmtl Streetlight_Support_Bulb
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2964,9 +2965,9 @@ map_Bump Textures/Streetlight_Support_Bulb_Normal.png
 newmtl Stringlights
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2980,9 +2981,9 @@ map_Bump Textures/Stringlights_Normal.png
 newmtl ToffeeJar_Label
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -2996,9 +2997,9 @@ map_Bump Textures/ToffeeJar_Label_Normal.png
 newmtl ToffeeJar_Metal
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3012,9 +3013,9 @@ map_Bump Textures/ToffeeJar_Metal_Normal.png
 newmtl ToffeeJar_Toffee
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3028,14 +3029,15 @@ map_Bump Textures/ToffeeJar_Toffee_Normal.png
 newmtl TransparentGlass.DoubleSided
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 6
+illum 1
 Pr 0.000000
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
+Tf 1.000000 1.000000 1.000000
 map_Kd Textures/TransparentGlass_BaseColor.png
 map_Ks Textures/TransparentGlass_Specular.png
 map_d Textures/TransparentGlass_BaseColor.png
@@ -3044,9 +3046,9 @@ map_Bump Textures/TransparentGlass_Normal.png
 newmtl Trashcan
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3060,9 +3062,9 @@ map_Bump Textures/Trashcan_Normal.png
 newmtl Trolley_Plastic
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3076,9 +3078,9 @@ map_Bump Textures/Trolley_Plastic_Normal.png
 newmtl Trolley_Wheels
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3092,9 +3094,9 @@ map_Bump Textures/Trolley_Wheels_Normal.png
 newmtl Trolley_Wood_Painted
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3108,9 +3110,9 @@ map_Bump Textures/Trolley_Wood_Painted_Normal.png
 newmtl Vespa
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3124,9 +3126,9 @@ map_Bump Textures/Vespa_Normal.png
 newmtl Vespa_Headlight
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3140,9 +3142,9 @@ map_Bump Textures/Vespa_Headlight_Normal.png
 newmtl Vespa_Odometer
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3156,9 +3158,9 @@ map_Bump Textures/Vespa_Odometer_Normal.png
 newmtl Vespa_Odometer_Glass
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3172,9 +3174,9 @@ map_Bump Textures/Vespa_Odometer_Glass_Normal.png
 newmtl Wall_Lamp
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3188,9 +3190,9 @@ map_Bump Textures/Wall_Lamp_Normal.png
 newmtl WickerBasket
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3204,9 +3206,9 @@ map_Bump Textures/WickerBasket_Normal.png
 newmtl Wood
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3220,9 +3222,9 @@ map_Bump Textures/Wood_Normal.png
 newmtl curtainA
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000
@@ -3236,9 +3238,9 @@ map_Bump Textures/curtainA_Normal.png
 newmtl curtainB1
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-illum 3
+illum 1
 Pr 0.552786
-Pm 1.000000
+Pm 0.000000
 Ps 0.000000
 Pc 0.000000
 Pcr 0.030000

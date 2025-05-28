@@ -80,7 +80,7 @@ impl RenderStep for RayprojectStep {
 
         let shader = state.device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/rayproject.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/rayproject/rayproject.wgsl").into()),
         });
 
         let pipeline_layout = state.device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -230,7 +230,11 @@ impl RenderStep for RayprojectStep {
                     render_pass.set_bind_group(i as u32, Some(bind_group), &[]);
                 }
     
-                render_pass.dispatch_workgroups(state.config.width / shader_definitions::WORKGROUP_DIM, state.config.height / shader_definitions::WORKGROUP_DIM, 1);
+                render_pass.dispatch_workgroups(
+                    ((state.config.width as f32) / (shader_definitions::WORKGROUP_DIM as f32)).ceil() as u32, 
+                    ((state.config.height as f32) / (shader_definitions::WORKGROUP_DIM as f32)).ceil() as u32, 
+                    1
+                );
                 
                 //println!("reprojected");
             }

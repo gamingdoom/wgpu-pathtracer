@@ -1,5 +1,5 @@
 newmtl Bin
-Kd 0.0 0 0
+Kd 1.0 1.0 1.0
 Ns 256
 d 1
 illum 3
@@ -62,7 +62,7 @@ Ks 0.5 0.5 0.5
 Pr 1
 
 newmtl Mirror
-Kd 0 0 0
+Kd 1.0 1.0 1.0
 Ns 8192
 d 1
 illum 3
