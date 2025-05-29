@@ -1,6 +1,7 @@
 use oidn::sys::OIDNFormat_OIDN_FORMAT_FLOAT3;
 use wgpu::{Extent3d, PollType, TexelCopyBufferInfo};
 
+use crate::shaders::shader_definitions::USE_DENOISER;
 use crate::{scene, wgpu_util};
 
 use crate::render_steps::RenderStep;
@@ -28,7 +29,12 @@ impl RenderStep for DenoiseStep {
             view_formats: &[],
         };
 
-        let input_texture = state.rt_device.create_texture(latest_real_frame_desc);
+        let mut input_texture: wgpu::Texture;
+        if crate::shaders::shader_definitions::USE_DENOISER {
+            input_texture = state.rt_device.create_texture(latest_real_frame_desc);
+        } else {
+            input_texture = state.latest_real_frame_rt.as_ref().unwrap().clone();
+        }
 
         Self {
             input_tv: input_texture.create_view(&wgpu::TextureViewDescriptor::default()),

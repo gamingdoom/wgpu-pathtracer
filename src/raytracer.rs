@@ -48,7 +48,7 @@ impl<'a> Raytracer<'a> {
 
         let mut scene = scene::Scene::new(&wgpu_state, camera);
 
-        //scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
+        scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
         //scene.load_obj(&wgpu_state, "res/minecraft/minecraft.obj");
         //scene.load_obj(&wgpu_state, "res/sports_car/sportsCar.obj");
         //scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
@@ -64,7 +64,7 @@ impl<'a> Raytracer<'a> {
         //scene.load_obj(&wgpu_state, "res/dragon.obj");
         //scene.load_obj(&wgpu_state, "res/knob/mitsuba.obj");
         //scene.load_obj(&wgpu_state, "res/normal_mapping/normal_mapping.obj");
-        scene.load_obj(&wgpu_state, "res/window_room/window_room.obj");
+        //scene.load_obj(&wgpu_state, "res/window_room/window_room.obj");
 
 
 
@@ -163,13 +163,15 @@ impl<'a> Raytracer<'a> {
             return Ok(());
         }
 
-        let mut encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("RT Encoder") });
+        if shader_definitions::USE_DENOISER {
+            let mut denoise_encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Denoise Encoder") });
 
-        // encoder.copy_texture_to_texture(
-        //     &wgpu::TexelCopyTextureInfo {
-        //         texture: &self.
-        //     }
-        // );
+            self.denoise_render_step.render(&mut self.wgpu_state, &self.scene, &mut denoise_encoder, None);
+
+            self.wgpu_state.rt_queue.submit(Some(denoise_encoder.finish()));
+        }
+
+        let mut encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("RT Encoder") });
 
         self.scene.prev_camera = self.scene.camera;
         self.scene.camera.frame += 1;
@@ -188,12 +190,6 @@ impl<'a> Raytracer<'a> {
         // unsafe {self.wgpu_state.vk_device.queue_submit(self.wgpu_state.rt_queue, submits, fence);}
 
         self.raytracer_submission_index = Some(self.wgpu_state.rt_queue.submit(Some(encoder.finish())));
-
-        let mut denoise_encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Denoise Encoder") });
-
-        self.denoise_render_step.render(&mut self.wgpu_state, &self.scene, &mut denoise_encoder, None);
-
-        self.wgpu_state.rt_queue.submit(Some(denoise_encoder.finish()));
 
         println!("Real FPS: {}", 1.0 / self.time_since_last_frame.elapsed().as_secs_f32());
 
@@ -335,7 +331,7 @@ impl<'a> Raytracer<'a> {
                 sample_count: 1,
                 dimension: wgpu::TextureDimension::D2,
                 format: wgpu::TextureFormat::Rgba32Float,
-                usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+                usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
                 view_formats: &[],
             };
 
@@ -358,7 +354,7 @@ impl<'a> Raytracer<'a> {
                                     dimension: wgpu::TextureDimension::D2,
                                     format: wgpu::TextureFormat::Rgba32Float,
                                     view_formats: (&[]).to_vec(),
-                                    usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST,
+                                    usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST | wgpu::TextureUses::COPY_SRC,
                                     memory_flags: wgpu::hal::MemoryFlags::empty()
                                 }, 
                                 Some(Box::new(|| {}))
@@ -366,7 +362,11 @@ impl<'a> Raytracer<'a> {
                             latest_real_frame_desc
             ) });
 
-            self.denoise_render_step.input_texture = self.wgpu_state.rt_device.create_texture(latest_real_frame_desc);
+            if shader_definitions::USE_DENOISER {
+                self.denoise_render_step.input_texture = self.wgpu_state.rt_device.create_texture(latest_real_frame_desc);
+            } else {
+                self.denoise_render_step.input_texture = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().clone();
+            }
 
             if shader_definitions::USE_PATHTRACER {
                 //self.rt_render_step.as_mut().unwrap().output_texture_view = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
