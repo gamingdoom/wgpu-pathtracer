@@ -1,8 +1,8 @@
 {
     "rust-analyzer.server.extraEnv": {
-        "OIDN_DIR": ""
+        "OIDN_DIR": "/usr"
     },
     "rust-analyzer.runnables.extraEnv": {
-        "OIDN_DIR": ""
+        "OIDN_DIR": "/usr"
     }
 }

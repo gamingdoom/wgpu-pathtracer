@@ -2,11 +2,13 @@ mod pt;
 mod blit;
 mod rayproject;
 mod bdpt;
+mod denoise;
 
 pub use pt::RTStep;
 pub use blit::BlitStep;
 pub use rayproject::RayprojectStep;
 pub use bdpt::BDPTStep;
+pub use denoise::DenoiseStep;
 
 use std::num::NonZeroU32;
 

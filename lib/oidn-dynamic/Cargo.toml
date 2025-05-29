@@ -1,0 +1,28 @@
+cargo-features = ["profile-rustflags"]
+
+[package]
+name = "oidn-dynamic"
+version = "2.3.2"
+edition = "2024"
+
+[dependencies]
+oidn = "2.3.2"
+
+[lib]
+crate-type = ["dylib"]
+
+[profile.dev]
+rpath = true
+rustflags = [
+    "-Z", "linker-features=+lld",
+    "-C", "prefer-dynamic=yes",
+    "-C", "rpath"
+]
+
+[profile.release]
+rpath = true
+rustflags = [
+    "-Z", "linker-features=+lld",
+    "-C", "prefer-dynamic=yes",
+    "-C", "rpath"
+]

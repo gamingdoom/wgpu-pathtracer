@@ -3,7 +3,6 @@ use std::{borrow::Cow, num::NonZeroU32, os::linux::raw};
 use ash::{khr::external_memory_fd, vk::Handle};
 
 use glam::{Vec3, Mat4};
-use oidn::sys::{oidnNewSharedBufferFromFD, oidnNewSharedBufferFromWin32Handle, OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_D3D11_RESOURCE, OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF, OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_WIN32};
 use wgpu::{hal::DynResource, naga, util::DeviceExt, wgc::api::Vulkan, Extent3d, TexelCopyBufferInfo, TlasInstance};
 
 use crate::{scene, shader, shaders::shader_definitions, uniforms, wgpu_buffer::{BufferType, StorageBuffer, UniformBuffer}, wgpu_util};
@@ -15,7 +14,7 @@ pub struct RTStep {
     
     blases: Vec<wgpu::Blas>,
     tlas_package: wgpu::TlasPackage,
-    pub output_texture: wgpu::Texture,
+    pub output_texture_view: wgpu::TextureView,
     
     rt_bind_group: Option<wgpu::BindGroup>,
     texture_bind_group: Option<wgpu::BindGroup>
@@ -236,7 +235,7 @@ impl RTStep {
                 wgpu::BindGroupEntry {
                     binding: 0,
                     resource: wgpu::BindingResource::TextureView(
-                        &self.output_texture.create_view(&wgpu::TextureViewDescriptor::default()),
+                        &self.output_texture_view,
                     ),
                 },
                 wgpu::BindGroupEntry {
@@ -441,7 +440,7 @@ impl RenderStep for RTStep {
             bind_groups: Vec::new(),
             blases: blases,
             tlas_package: tlas_package,
-            output_texture: wgpu_state.blit_storage_texture.clone(),
+            output_texture_view: wgpu_state.blit_storage_texture.clone().create_view(&wgpu::TextureViewDescriptor::default()),
             rt_bind_group: None,
             texture_bind_group: None,
         };
@@ -524,161 +523,167 @@ impl RenderStep for RTStep {
         }
 
 
+        
 
-        #[cfg(any(target_os = "linux", target_os = "windows"))]
-        {
 
-            // Intel ODIN
 
-            // Create a new buffer and copy the output texture to it.
+            // let bci = ash::vk::BufferCreateInfo {
+            //     s_type: ash::vk::StructureType::BUFFER_CREATE_INFO,
+            //     size: state.config.width as u64 * state.config.height as u64 * 4 * 4,
+            //     usage: ash::vk::BufferUsageFlags::TRANSFER_SRC | ash::vk::BufferUsageFlags::TRANSFER_DST,
+            //     sharing_mode: ash::vk::SharingMode::EXCLUSIVE,
+            //     ..Default::default()
+            // };
 
-            let bci = ash::vk::BufferCreateInfo {
-                s_type: ash::vk::StructureType::BUFFER_CREATE_INFO,
-                size: state.config.width as u64 * state.config.height as u64 * 4 * 4,
-                usage: ash::vk::BufferUsageFlags::TRANSFER_SRC | ash::vk::BufferUsageFlags::TRANSFER_DST,
-                sharing_mode: ash::vk::SharingMode::EXCLUSIVE,
-                ..Default::default()
-            };
-
-            let (buffer, wgpu_buffer, raw_memory, handle) = unsafe { state.rt_device.as_hal::<Vulkan, _, _>(|d| {
+            // let (buffer, wgpu_buffer, raw_memory, handle) = unsafe { state.rt_device.as_hal::<Vulkan, _, _>(|d| {
             
-                let hal_device = d.unwrap();
+            //     let hal_device = d.unwrap();
             
-                let raw_device = hal_device.raw_device();
+            //     let raw_device = hal_device.raw_device();
                 
-                let buffer = unsafe { raw_device.create_buffer(&bci, None) }.unwrap();
+            //     let buffer = unsafe { raw_device.create_buffer(&bci, None) }.unwrap();
 
-                let memory_requirements = unsafe { raw_device.get_buffer_memory_requirements(buffer) };
+            //     let memory_requirements = unsafe { raw_device.get_buffer_memory_requirements(buffer) };
 
-                // TODO actually find memory types properly
+            //     // TODO actually find memory types properly
 
-                let memory_type_index = 0;
+            //     let memory_type_index = 0;
 
-                let extern_alloc_info = ash::vk::ExportMemoryAllocateInfo {
-                    s_type: ash::vk::StructureType::EXPORT_MEMORY_ALLOCATE_INFO,
-                    #[cfg(target_os = "linux")]
-                    handle_types: ash::vk::ExternalMemoryHandleTypeFlags::DMA_BUF_EXT,
-                    #[cfg(target_os = "windows")]
-                    handle_types: ash::vk::ExternalMemoryHandleTypeFlags::OPAQUE_WIN32,
-                    ..Default::default()
-                };
+            //     let extern_alloc_info = ash::vk::ExportMemoryAllocateInfo {
+            //         s_type: ash::vk::StructureType::EXPORT_MEMORY_ALLOCATE_INFO,
+            //         #[cfg(target_os = "linux")]
+            //         handle_types: ash::vk::ExternalMemoryHandleTypeFlags::DMA_BUF_EXT,
+            //         #[cfg(target_os = "windows")]
+            //         handle_types: ash::vk::ExternalMemoryHandleTypeFlags::OPAQUE_WIN32,
+            //         ..Default::default()
+            //     };
 
-                let alloc_info = ash::vk::MemoryAllocateInfo {
-                    s_type: ash::vk::StructureType::MEMORY_ALLOCATE_INFO,
-                    allocation_size: memory_requirements.size,
-                    memory_type_index,
-                    p_next: &extern_alloc_info as *const _ as *const _,
-                    ..Default::default()
-                };
+            //     let alloc_info = ash::vk::MemoryAllocateInfo {
+            //         s_type: ash::vk::StructureType::MEMORY_ALLOCATE_INFO,
+            //         allocation_size: memory_requirements.size,
+            //         memory_type_index,
+            //         p_next: &extern_alloc_info as *const _ as *const _,
+            //         ..Default::default()
+            //     };
 
-                let raw_memory = unsafe { raw_device.allocate_memory(&alloc_info, None) }.unwrap();
+            //     let raw_memory = unsafe { raw_device.allocate_memory(&alloc_info, None) }.unwrap();
 
-                let mut handle;
-                #[cfg(target_os = "linux")]
-                {
-                    let get_handle_info = ash::vk::MemoryGetFdInfoKHR {
-                        s_type: ash::vk::StructureType::MEMORY_GET_FD_INFO_KHR,
-                        memory: raw_memory,
-                        handle_type: ash::vk::ExternalMemoryHandleTypeFlags::DMA_BUF_EXT,
-                        ..Default::default()
-                    };
+            //     let mut handle;
+            //     #[cfg(target_os = "linux")]
+            //     {
+            //         let get_handle_info = ash::vk::MemoryGetFdInfoKHR {
+            //             s_type: ash::vk::StructureType::MEMORY_GET_FD_INFO_KHR,
+            //             memory: raw_memory,
+            //             handle_type: ash::vk::ExternalMemoryHandleTypeFlags::DMA_BUF_EXT,
+            //             ..Default::default()
+            //         };
 
-                    handle = unsafe { ash::khr::external_memory_fd::Device::new(&state.instance, &raw_device).get_memory_fd(&get_handle_info) }.unwrap();
-                }
+            //         handle = unsafe { ash::khr::external_memory_fd::Device::new(&state.instance, &raw_device).get_memory_fd(&get_handle_info) }.unwrap();
+            //     }
 
 
-                #[cfg(target_os = "windows")]
-                {
-                    let get_handle_info = ash::vk::MemoryGetWin32HandleInfoKHR {
-                        s_type: ash::vk::StructureType::MEMORY_GET_WIN32_HANDLE_INFO_KHR,
-                        memory: raw_memory,
-                        handle_type: ash::vk::ExternalMemoryHandleTypeFlags::OPAQUE_WIN32,
-                        ..Default::default()
-                    };
+            //     #[cfg(target_os = "windows")]
+            //     {
+            //         let get_handle_info = ash::vk::MemoryGetWin32HandleInfoKHR {
+            //             s_type: ash::vk::StructureType::MEMORY_GET_WIN32_HANDLE_INFO_KHR,
+            //             memory: raw_memory,
+            //             handle_type: ash::vk::ExternalMemoryHandleTypeFlags::OPAQUE_WIN32,
+            //             ..Default::default()
+            //         };
 
-                    handle = unsafe { ash::khr::external_memory_win32::Device::new(&state.instance, raw_device).get_memory_win32_handle(&get_handle_info) }.unwrap();
-                }
+            //         handle = unsafe { ash::khr::external_memory_win32::Device::new(&state.instance, raw_device).get_memory_win32_handle(&get_handle_info) }.unwrap();
+            //     }
 
-                unsafe { raw_device.bind_buffer_memory(buffer, raw_memory, 0) }.unwrap();
+            //     unsafe { raw_device.bind_buffer_memory(buffer, raw_memory, 0) }.unwrap();
 
-                let wgpu_buffer = unsafe { wgpu::hal::vulkan::Device::buffer_from_raw(
-                                buffer
-                ) };
+            //     let hal_buffer = unsafe { wgpu::hal::vulkan::Device::buffer_from_raw(
+            //                     buffer
+            //     ) };
 
-                (buffer, wgpu_buffer, raw_memory, handle)
-            }) };
+            //     let wgpu_buffer = unsafe { state.rt_device.create_buffer_from_hal::<Vulkan>(
+            //         hal_buffer,
+            //         &wgpu::BufferDescriptor {
+            //             label: None,
+            //             size: state.config.width as u64 * state.config.height as u64 * 4 * 4,
+            //             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::COPY_SRC,
+            //             mapped_at_creation: false,
+            //         }
+            //     ) };
+
+            //     (buffer, wgpu_buffer, raw_memory, handle)
+            // }) };
             
 
-            encoder.copy_texture_to_buffer(
-                self.output_texture.as_image_copy(),
-                TexelCopyBufferInfo {
-                    buffer: wgpu_buffer.as_any().downcast_ref().unwrap(),
-                    layout: wgpu::TexelCopyBufferLayout {
-                        offset: 0,
-                        bytes_per_row: Some(state.config.width as u32 * 4 * 4),
-                        rows_per_image: Some(state.config.height as u32),
-                    }
-                },
-                Extent3d {
-                    width: state.config.width as u32,
-                    height: state.config.height as u32,
-                    depth_or_array_layers: 1,
-                }
-            );
+            // encoder.copy_texture_to_buffer(
+            //     self.output_texture.as_image_copy(),
+            //     TexelCopyBufferInfo {
+            //         buffer: &wgpu_buffer,
+            //         layout: wgpu::TexelCopyBufferLayout {
+            //             offset: 0,
+            //             bytes_per_row: Some(state.config.width as u32 * 4 * 4),
+            //             rows_per_image: Some(state.config.height as u32),
+            //         }
+            //     },
+            //     Extent3d {
+            //         width: state.config.width as u32,
+            //         height: state.config.height as u32,
+            //         depth_or_array_layers: 1,
+            //     }
+            // );
 
-            // Actually denoise it now
-            #[cfg(target_os = "linux")]
-            let oidn_buf = unsafe { oidnNewSharedBufferFromFD(
-                state.oidn_device.raw(), 
-                OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF,
-                handle,
-                (state.config.width as u64 * state.config.height as u64 * 4 * 4) as usize
-            ) };
+            // // Actually denoise it now
+            // #[cfg(target_os = "linux")]
+            // let oidn_buf = unsafe { oidnNewSharedBufferFromFD(
+            //     state.oidn_device.raw(), 
+            //     OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF,
+            //     handle,
+            //     (state.config.width as u64 * state.config.height as u64 * 4 * 4) as usize
+            // ) };
                 
-            #[cfg(target_os = "windows")]
-            let oidn_buf = unsafe { oidnNewSharedBufferFromWin32Handle(
-                state.oidn_device,
-                OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_WIN32,
-                handle,
-                c"thingy",
-                state.config.width as u64 * state.config.height as u64 * 4 * 4
-            ) };
+            // #[cfg(target_os = "windows")]
+            // let oidn_buf = unsafe { oidnNewSharedBufferFromWin32Handle(
+            //     state.oidn_device,
+            //     OIDNExternalMemoryTypeFlag_OIDN_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_WIN32,
+            //     handle,
+            //     c"thingy",
+            //     state.config.width as u64 * state.config.height as u64 * 4 * 4
+            // ) };
 
-            let mut buf = unsafe { state.oidn_device.create_buffer_from_raw(oidn_buf) };
+            // let mut buf = unsafe { state.oidn_device.create_buffer_from_raw(oidn_buf) };
 
-            oidn::RayTracing::new(&state.oidn_device)
-                .srgb(true)
-                .image_dimensions(state.config.width as usize, state.config.height as usize)
-                .filter_in_place_buffer(&mut buf)
-                .expect("filter config error");
+            // oidn::RayTracing::new(&state.oidn_device)
+            //     .srgb(true)
+            //     .image_dimensions(state.config.width as usize, state.config.height as usize)
+            //     .filter_in_place_buffer(&mut buf)
+            //     .expect("filter config error");
 
-            if let Err(e) = state.oidn_device.get_error() {
-                println!("oidn error: {}", e.1);
-                panic!()
-            }
+            // if let Err(e) = state.oidn_device.get_error() {
+            //     println!("oidn error: {}", e.1);
+            //     panic!()
+            // }
 
-            encoder.copy_buffer_to_texture(
-                TexelCopyBufferInfo {
-                    buffer: wgpu_buffer.as_any().downcast_ref().unwrap(),
-                    layout: wgpu::TexelCopyBufferLayout {
-                        offset: 0,
-                        bytes_per_row: Some(state.config.width as u32 * 4 * 4),
-                        rows_per_image: Some(state.config.height as u32),
-                    }
-                },
-                self.output_texture.as_image_copy(),
-                Extent3d {
-                    width: state.config.width as u32,
-                    height: state.config.height as u32,
-                    depth_or_array_layers: 1,
-                }
-            );
+            // encoder.copy_buffer_to_texture(
+            //     TexelCopyBufferInfo {
+            //         buffer: &wgpu_buffer,
+            //         layout: wgpu::TexelCopyBufferLayout {
+            //             offset: 0,
+            //             bytes_per_row: Some(state.config.width as u32 * 4 * 4),
+            //             rows_per_image: Some(state.config.height as u32),
+            //         }
+            //     },
+            //     self.output_texture.as_image_copy(),
+            //     Extent3d {
+            //         width: state.config.width as u32,
+            //         height: state.config.height as u32,
+            //         depth_or_array_layers: 1,
+            //     }
+            // );
 
-            let _ = unsafe { state.rt_device.as_hal::<Vulkan, _, _>(|d| {
-                let raw_device = d.unwrap().raw_device();
-                unsafe { raw_device.free_memory(raw_memory, None) };
-                unsafe { raw_device.destroy_buffer(buffer, None) };            
-            }) };
-        }
+            // let _ = unsafe { state.rt_device.as_hal::<Vulkan, _, _>(|d| {
+            //     let raw_device = d.unwrap().raw_device();
+            //     unsafe { raw_device.free_memory(raw_memory, None) };
+            //     unsafe { raw_device.destroy_buffer(buffer, None) };            
+            // }) };
+        //}
     }
 }

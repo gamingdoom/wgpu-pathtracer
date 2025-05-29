@@ -18,7 +18,7 @@ pub struct RayprojectStep {
     bind_groups: Vec<wgpu::BindGroup>,
 
     pub latest_real_frame: wgpu::Texture,
-    pub latest_real_frame_rt: wgpu::Texture,
+    //pub latest_real_frame_rt: wgpu::Texture,
 
     time_of_last_rayproject: std::time::Instant,
 
@@ -109,7 +109,7 @@ impl RenderStep for RayprojectStep {
             sample_count: 1,
             dimension: wgpu::TextureDimension::D2,
             format: wgpu::TextureFormat::Rgba32Float,
-            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
             view_formats: &[],
         };
 
@@ -142,6 +142,8 @@ impl RenderStep for RayprojectStep {
             latest_real_frame_desc
         ) };
 
+        state.latest_real_frame_rt = Some(latest_real_frame_rt);
+
         // let mut encoder = state.device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Init Encoder") });
         // encoder.clear_texture(&latest_real_frame, &ImageSubresourceRange {
         //     ..Default::default()
@@ -153,7 +155,7 @@ impl RenderStep for RayprojectStep {
             pipeline,
             bind_groups: Vec::new(),
             latest_real_frame,
-            latest_real_frame_rt,
+            //latest_real_frame_rt,
             time_of_last_rayproject: std::time::Instant::now(),
         }
     }

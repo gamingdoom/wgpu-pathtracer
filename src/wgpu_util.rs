@@ -37,7 +37,9 @@ pub struct WGPUState <'a> {
     pub window_cursor_grabbed: bool,
     pub refresh_rate: f32,
 
-    pub oidn_device: oidn::Device,
+    pub latest_real_frame_rt: Option<wgpu::Texture>,
+
+    pub oidn_device: oidn_wgpu_interop::Device,
 }
 
 impl<'a> WGPUState<'a>{
@@ -46,7 +48,7 @@ impl<'a> WGPUState<'a>{
 
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN, 
-            flags: wgpu::InstanceFlags::empty(),
+            flags: wgpu::InstanceFlags::empty(),//wgpu::InstanceFlags::VALIDATION | wgpu::InstanceFlags::GPU_BASED_VALIDATION,
             ..Default::default()
         });
 
@@ -171,7 +173,7 @@ impl<'a> WGPUState<'a>{
             memory_hints: wgpu::MemoryHints::Performance,
             ..Default::default()
         })}.unwrap();
-
+        
         let (device_2, queue_2) = unsafe { adapter.create_device_from_hal(hal_device_2, &wgpu::DeviceDescriptor {
             label: Some("rt device"),
             required_features: features,
@@ -187,12 +189,16 @@ impl<'a> WGPUState<'a>{
             ..Default::default()
         })}.unwrap();
 
+        let (oidn_device, queue_2) = pollster::block_on(oidn_wgpu_interop::Device::new_from_dev(&adapter, device_2, queue_2, None)).unwrap();
+
+        let device_2 = oidn_device.wgpu_device().to_owned();
+
         unsafe {
             //device.start_graphics_debugger_capture();
             device_2.start_graphics_debugger_capture();
         }
 
-        return Self::resize(device, device_2, queue, queue_2, vk_instance, adapter, surface, window, sdl_context, size);
+        return Self::resize(device, device_2, queue, queue_2, vk_instance, adapter, oidn_device, surface, window, sdl_context, size);
 
         // let (device, queue) = adapter.request_device(&wgpu::DeviceDescriptor {
         //         required_features: 
@@ -219,7 +225,7 @@ impl<'a> WGPUState<'a>{
 
     }
 
-    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, instance: &ash::Instance, adapter: wgpu::Adapter, surface: wgpu::Surface<'a>, window: &'a sdl3::video::Window, sdl_context: &'a sdl3::Sdl, size: (u32, u32)) -> WGPUState<'a> {
+    pub fn resize(device: wgpu::Device, device_2: wgpu::Device, pp_queue: wgpu::Queue, rt_queue: wgpu::Queue, instance: &ash::Instance, adapter: wgpu::Adapter, oidn_device: oidn_wgpu_interop::Device, surface: wgpu::Surface<'a>, window: &'a sdl3::video::Window, sdl_context: &'a sdl3::Sdl, size: (u32, u32)) -> WGPUState<'a> {
         let surface_caps = surface.get_capabilities(&adapter);
         let surface_format = surface_caps.formats.iter()
             .find(|f| f.is_srgb())
@@ -302,8 +308,6 @@ impl<'a> WGPUState<'a>{
         ) };
 
         let refresh_rate = 1.0 / ((window.get_display().unwrap().get_mode().unwrap().refresh_rate));
-
-        let oidn_dev = oidn::Device::new();
                 
         Self {
             instance: instance.clone(),
@@ -322,7 +326,8 @@ impl<'a> WGPUState<'a>{
             rt_queue: rt_queue,
             window_cursor_grabbed: false,
             refresh_rate,
-            oidn_device: oidn_dev,
+            latest_real_frame_rt: None,
+            oidn_device
         }
     }
 
