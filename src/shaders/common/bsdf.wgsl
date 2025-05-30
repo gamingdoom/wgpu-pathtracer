@@ -224,7 +224,7 @@ fn disney_bsdf(
         color,
         pdf,
         data.ray_outgoing,
-        p + (data.normal * mix(0.01, 0.0, f32(data.refracted)))
+        p + (data.normal * mix(0.01 * sign(data.ndotv), 0.0, f32(data.refracted)))
     );
 
     return rtn;

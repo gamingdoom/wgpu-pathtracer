@@ -28,6 +28,11 @@ var<storage, read> lights: array<Triangle>;
 @group(0) @binding(7)
 var depth_output: texture_storage_2d<r32float, write>;
 
+@group(0) @binding(8)
+var<storage, read_write> normals_output: array<vec4<f32>>;
+
+@group(0) @binding(9)
+var<storage, read_write> albedo_output: array<vec4<f32>>;
 
 @group(1) @binding(0)
 var textures: binding_array<texture_2d<f32>, MAX_TEXTURES>;

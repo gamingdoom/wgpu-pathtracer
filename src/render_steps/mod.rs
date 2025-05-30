@@ -21,4 +21,5 @@ pub trait RenderStep {
     fn create(state: &mut wgpu_util::WGPUState, scene: &scene::Scene) -> Self;
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene);
     fn render(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene, encoder: &mut wgpu::CommandEncoder, output: Option<&wgpu::SurfaceTexture>);
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene);
 }

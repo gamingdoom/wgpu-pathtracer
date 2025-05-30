@@ -1,4 +1,7 @@
-use oidn::sys::OIDNFormat_OIDN_FORMAT_FLOAT3;
+use std::sync::Arc;
+
+use oidn::sys::{OIDNFormat_OIDN_FORMAT_FLOAT3, OIDNQuality_OIDN_QUALITY_BALANCED, OIDNQuality_OIDN_QUALITY_HIGH};
+use oidn_wgpu_interop::SharedBuffer;
 use wgpu::{Extent3d, PollType, TexelCopyBufferInfo};
 
 use crate::shaders::shader_definitions::USE_DENOISER;
@@ -10,6 +13,11 @@ pub struct DenoiseStep {
     pub input_texture: wgpu::Texture,
     pub input_tv: wgpu::TextureView,
     pub output_texture: Option<wgpu::Texture>,
+    
+    buffer: SharedBuffer,
+
+    pub normal_buffer: Option<Arc<SharedBuffer>>,
+    pub albedo_buffer: Option<Arc<SharedBuffer>>,
 }
 
 impl RenderStep for DenoiseStep {
@@ -36,10 +44,22 @@ impl RenderStep for DenoiseStep {
             input_texture = state.latest_real_frame_rt.as_ref().unwrap().clone();
         }
 
+        // Round up to nearest 256
+        let tex_bytes_per_row = (256.0 * ((state.config.width * 4 * 4) as f32 / 256.0).ceil()) as u32;
+        let tex_num_rows = state.config.height;
+        let tex_num_bytes = tex_bytes_per_row * tex_num_rows;
+
+        let buffer = state.oidn_device.allocate_shared_buffers((tex_num_bytes) as u64).unwrap();
+
         Self {
             input_tv: input_texture.create_view(&wgpu::TextureViewDescriptor::default()),
             input_texture,
-            output_texture: None 
+            output_texture: None,
+
+            buffer,
+
+            normal_buffer: None,
+            albedo_buffer: None,
         }
     }
 
@@ -55,18 +75,19 @@ impl RenderStep for DenoiseStep {
             // Create a new buffer and copy the output texture to it.
             let out_tex = state.latest_real_frame_rt.as_ref().unwrap();
 
-            let tex_bytes_per_row = state.config.width * 4 * 4;
+            // Round up to nearest 256
+            let tex_bytes_per_row = (256.0 * ((state.config.width * 4 * 4) as f32 / 256.0).ceil()) as u32;
             let tex_num_rows = state.config.height;
             let tex_num_bytes = tex_bytes_per_row * tex_num_rows;
 
-            let mut buffer = state.oidn_device.allocate_shared_buffers((tex_num_bytes) as u64).unwrap();
+            // let buffer = state.oidn_device.allocate_shared_buffers((tex_num_bytes) as u64).unwrap();
 
             let mut copy_encoder = state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Copy Encoder") });
 
             copy_encoder.copy_texture_to_buffer(
                 self.input_texture.as_image_copy(),
                 TexelCopyBufferInfo {
-                    buffer: &buffer.wgpu_buffer(),
+                    buffer: &self.buffer.wgpu_buffer(),
                     layout: wgpu::TexelCopyBufferLayout {
                         offset: 0,
                         bytes_per_row: Some(tex_bytes_per_row),
@@ -95,18 +116,47 @@ impl RenderStep for DenoiseStep {
                 oidn::sys::oidnSetFilterImage(
                     filter,
                     c"color" as *const _ as _,
-                    buffer.oidn_buffer().raw(),
+                    self.buffer.oidn_buffer().raw(),
                     OIDNFormat_OIDN_FORMAT_FLOAT3,
                     state.config.width as usize,
                     state.config.height as usize,
                     0,
-                    16,
+                    tex_bytes_per_row as usize / state.config.width as usize,
                     0
                 );
+
+                if let Some(normal_buffer) = &self.normal_buffer {
+                    oidn::sys::oidnSetFilterImage(
+                        filter,
+                        c"normal" as *const _ as _,
+                        normal_buffer.oidn_buffer().raw(),
+                        OIDNFormat_OIDN_FORMAT_FLOAT3,
+                        state.config.width as usize,
+                        state.config.height as usize,
+                        0,
+                        16,
+                        0
+                    );
+                }
+
+                if let Some(albedo_buffer) = &self.albedo_buffer {
+                    oidn::sys::oidnSetFilterImage(
+                        filter,
+                        c"albedo" as *const _ as _,
+                        albedo_buffer.oidn_buffer().raw(),
+                        OIDNFormat_OIDN_FORMAT_FLOAT3,
+                        state.config.width as usize,
+                        state.config.height as usize,
+                        0,
+                        16,
+                        0
+                    );
+                }
+
                 oidn::sys::oidnSetFilterImage(
                     filter,
                     c"output" as *const _ as _,
-                    buffer.oidn_buffer().raw(),
+                    self.buffer.oidn_buffer().raw(),
                     OIDNFormat_OIDN_FORMAT_FLOAT3,
                     state.config.width as usize,
                     state.config.height as usize,
@@ -114,24 +164,32 @@ impl RenderStep for DenoiseStep {
                     16,
                     0
                 );
-                oidn::sys::oidnSetFilterBool(filter, c"srgb" as *const _ as _, true);
+                oidn::sys::oidnSetFilterInt(filter, c"quality" as *const _ as _, OIDNQuality_OIDN_QUALITY_HIGH.try_into().unwrap());
+                oidn::sys::oidnSetFilterBool(filter, c"hdr" as *const _ as _, true);
+                
+                // Makes image worse for some reason?
+                //oidn::sys::oidnSetFilterBool(filter, c"cleanAux" as *const _ as _, true);
+                
+                oidn::sys::oidnSetFilterBool(filter, c"srgb" as *const _ as _, false);
+
                 oidn::sys::oidnCommitFilter(filter);
 
-                oidn::sys::oidnExecuteFilter(filter);
+                // TODO this is undefined behaviour.
+                oidn::sys::oidnExecuteFilterAsync(filter);
 
                 oidn::sys::oidnReleaseFilter(filter);
             };
 
             if let Err(e) = state.oidn_device.oidn_device().get_error() {
                 println!("oidn error: {}", e.1);
-                panic!()
+                //panic!()
             }
 
             let mut copy_encoder = state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Copy Encoder") });
 
             copy_encoder.copy_buffer_to_texture(
                 TexelCopyBufferInfo {
-                    buffer: &buffer.wgpu_buffer(),
+                    buffer: &self.buffer.wgpu_buffer(),
                     layout: wgpu::TexelCopyBufferLayout {
                         offset: 0,
                         bytes_per_row: Some(tex_bytes_per_row),
@@ -152,5 +210,16 @@ impl RenderStep for DenoiseStep {
             
             //std::mem::forget(buffer);
         }
+    }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        // Round up to nearest 256
+        let tex_bytes_per_row = (256.0 * ((state.config.width * 4 * 4) as f32 / 256.0).ceil()) as u32;
+        let tex_num_rows = state.config.height;
+        let tex_num_bytes = tex_bytes_per_row * tex_num_rows;
+
+        let buffer = state.oidn_device.allocate_shared_buffers((tex_num_bytes) as u64).unwrap();
+
+        self.buffer = buffer.into();
     }
 }

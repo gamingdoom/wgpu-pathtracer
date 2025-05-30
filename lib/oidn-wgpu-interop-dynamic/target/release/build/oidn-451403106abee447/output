@@ -1,3 +1,0 @@
-cargo:rustc-link-search=native=/usr/lib
-cargo:rerun-if-env-changed=OIDN_DIR
-cargo:rustc-link-lib=OpenImageDenoise

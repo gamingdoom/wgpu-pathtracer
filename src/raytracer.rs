@@ -1,4 +1,5 @@
 use std::iter;
+use std::sync::Arc;
 
 use glam::{Mat4, Vec3};
 use sdl3::event::Event;
@@ -48,7 +49,7 @@ impl<'a> Raytracer<'a> {
 
         let mut scene = scene::Scene::new(&wgpu_state, camera);
 
-        scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
+        //scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
         //scene.load_obj(&wgpu_state, "res/minecraft/minecraft.obj");
         //scene.load_obj(&wgpu_state, "res/sports_car/sportsCar.obj");
         //scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
@@ -58,15 +59,13 @@ impl<'a> Raytracer<'a> {
         //scene.load_obj(&wgpu_state, "res/san_miguel/san-miguel.obj");
         //scene.load_obj(&wgpu_state, "res/bedroom/iscv2.obj");
         //scene.load_obj(&wgpu_state, "res/subway/subway.obj");
-        //scene.load_obj(&wgpu_state, "res/bistro/bistro.obj");
+        scene.load_obj(&wgpu_state, "res/bistro/bistro.obj");
         //scene.load_obj(&wgpu_state, "res/glass_cube.obj");
         //scene.load_obj(&wgpu_state, "res/transmission_test/transmission_test.obj");
         //scene.load_obj(&wgpu_state, "res/dragon.obj");
         //scene.load_obj(&wgpu_state, "res/knob/mitsuba.obj");
         //scene.load_obj(&wgpu_state, "res/normal_mapping/normal_mapping.obj");
         //scene.load_obj(&wgpu_state, "res/window_room/window_room.obj");
-
-
 
         //let (render_pipeline, blases) = scene.create_resources(&wgpu_state.device, &wgpu_state.queue);
 
@@ -87,6 +86,10 @@ impl<'a> Raytracer<'a> {
             step.output_texture_view = denoise_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
             //step.output_texture_view = wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
             rt_step = Some(step);
+
+            denoise_step.normal_buffer = Some(rt_step.as_ref().unwrap().normal_buffer.clone());
+            denoise_step.albedo_buffer = Some(rt_step.as_ref().unwrap().albedo_buffer.clone());
+
         } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
             let mut step = render_steps::BDPTStep::create(&mut wgpu_state, &scene);
             //step.output_texture_view = denoise_step.input_tv.clone();
@@ -335,32 +338,7 @@ impl<'a> Raytracer<'a> {
                 view_formats: &[],
             };
 
-            self.rayproject_render_step.latest_real_frame = self.wgpu_state.device.create_texture(latest_real_frame_desc);
-    
-            self.wgpu_state.latest_real_frame_rt = Some(unsafe { self.wgpu_state.rt_device.create_texture_from_hal::<Vulkan>(
-                            self.wgpu_state.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
-                                self.rayproject_render_step.latest_real_frame.as_hal::<Vulkan, _, _>(|tex| {
-                                    tex.unwrap().raw_handle()
-                                }), 
-                                &wgpu::hal::TextureDescriptor {
-                                    label: Some("prev_frame"),
-                                    size: wgpu::Extent3d {
-                                        width: self.wgpu_state.config.width,
-                                        height: self.wgpu_state.config.height,
-                                        depth_or_array_layers: 1,
-                                    },
-                                    mip_level_count: 1,
-                                    sample_count: 1,
-                                    dimension: wgpu::TextureDimension::D2,
-                                    format: wgpu::TextureFormat::Rgba32Float,
-                                    view_formats: (&[]).to_vec(),
-                                    usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST | wgpu::TextureUses::COPY_SRC,
-                                    memory_flags: wgpu::hal::MemoryFlags::empty()
-                                }, 
-                                Some(Box::new(|| {}))
-                            )),
-                            latest_real_frame_desc
-            ) });
+            self.rayproject_render_step.resize(&mut self.wgpu_state, &self.scene);
 
             if shader_definitions::USE_DENOISER {
                 self.denoise_render_step.input_texture = self.wgpu_state.rt_device.create_texture(latest_real_frame_desc);
@@ -368,22 +346,29 @@ impl<'a> Raytracer<'a> {
                 self.denoise_render_step.input_texture = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().clone();
             }
 
+            self.wgpu_state.resize_2();
+
             if shader_definitions::USE_PATHTRACER {
                 //self.rt_render_step.as_mut().unwrap().output_texture_view = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
                 self.rt_render_step.as_mut().unwrap().output_texture_view = self.denoise_render_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
+                self.rt_render_step.as_mut().unwrap().resize(&mut self.wgpu_state, &self.scene);
+
+                self.denoise_render_step.normal_buffer = Some(self.rt_render_step.as_ref().unwrap().normal_buffer.clone());
+                self.denoise_render_step.albedo_buffer = Some(self.rt_render_step.as_ref().unwrap().albedo_buffer.clone());
             } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
-                self.bdpt_render_step.as_mut().unwrap().output_texture_view = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
+                self.bdpt_render_step.as_mut().unwrap().output_texture_view = self.denoise_render_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
+                self.bdpt_render_step.as_mut().unwrap().resize(&mut self.wgpu_state, &self.scene);
             }
 
-            self.wgpu_state.resize_2();
+            self.denoise_render_step.resize(&mut self.wgpu_state, &self.scene);
 
-            self.blit_render_step.update(&mut self.wgpu_state, &self.scene);
+            self.blit_render_step.resize(&mut self.wgpu_state, &self.scene);
 
-            if shader_definitions::USE_PATHTRACER {
-                self.rt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
-            } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
-                self.bdpt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
-            }
+            // if shader_definitions::USE_PATHTRACER {
+            //     self.rt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
+            // } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
+            //     self.bdpt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
+            // }
 
             // self.wgpu_state.size = size;
             // self.wgpu_state.config.width = size.width;

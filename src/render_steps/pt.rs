@@ -1,8 +1,9 @@
-use std::{borrow::Cow, num::NonZeroU32, os::linux::raw};
+use std::{borrow::Cow, num::NonZeroU32, os::linux::raw, sync::Arc};
 
 use ash::{khr::external_memory_fd, vk::Handle};
 
 use glam::{Vec3, Mat4};
+use oidn_wgpu_interop::SharedBuffer;
 use wgpu::{hal::DynResource, naga, util::DeviceExt, wgc::api::Vulkan, Extent3d, TexelCopyBufferInfo, TlasInstance};
 
 use crate::{scene, shader, shaders::shader_definitions, uniforms, wgpu_buffer::{BufferType, StorageBuffer, UniformBuffer}, wgpu_util};
@@ -17,7 +18,10 @@ pub struct RTStep {
     pub output_texture_view: wgpu::TextureView,
     
     rt_bind_group: Option<wgpu::BindGroup>,
-    texture_bind_group: Option<wgpu::BindGroup>
+    texture_bind_group: Option<wgpu::BindGroup>,
+
+    pub normal_buffer: Arc<SharedBuffer>,
+    pub albedo_buffer: Arc<SharedBuffer>
 }
 
 impl RTStep {
@@ -103,6 +107,26 @@ impl RTStep {
                     },
                     count: None,
                 },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 8,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: false },
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 9,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: false },
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                }
             ],
         });
 
@@ -268,6 +292,14 @@ impl RTStep {
                         &state.depth_texture_rt_view,
                     ),
                 },
+                wgpu::BindGroupEntry {
+                    binding: 8,
+                    resource: self.normal_buffer.wgpu_buffer().as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 9,
+                    resource: self.albedo_buffer.wgpu_buffer().as_entire_binding(),
+                }
             ],
         });
 
@@ -433,9 +465,17 @@ impl RenderStep for RTStep {
             update_mode: wgpu::AccelerationStructureUpdateMode::Build,
         });
 
-        let mut tlas_package = wgpu::TlasPackage::new(tlas);
+        let tlas_package = wgpu::TlasPackage::new(tlas);
+
+        // Round up to nearest 256
+        let tex_bytes_per_row = (256.0 * ((wgpu_state.config.width * 4 * 4) as f32 / 256.0).ceil()) as u32;
+        let tex_num_rows = wgpu_state.config.height;
+        let tex_num_bytes = tex_bytes_per_row * tex_num_rows;
+
+        let normals_buffer = wgpu_state.oidn_device.allocate_shared_buffers(tex_num_bytes as u64).unwrap();
+        let albedo_buffer = wgpu_state.oidn_device.allocate_shared_buffers(tex_num_bytes as u64).unwrap();
         
-        let mut this = Self {
+        let this = Self {
             pipeline: render_pipeline,
             bind_groups: Vec::new(),
             blases: blases,
@@ -443,6 +483,8 @@ impl RenderStep for RTStep {
             output_texture_view: wgpu_state.blit_storage_texture.clone().create_view(&wgpu::TextureViewDescriptor::default()),
             rt_bind_group: None,
             texture_bind_group: None,
+            normal_buffer: normals_buffer.into(),
+            albedo_buffer: albedo_buffer.into(),
         };
         this
     }
@@ -685,5 +727,20 @@ impl RenderStep for RTStep {
             //     unsafe { raw_device.destroy_buffer(buffer, None) };            
             // }) };
         //}
+    }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        // Round up to nearest 256
+        let tex_bytes_per_row = (256.0 * ((state.config.width * 4 * 4) as f32 / 256.0).ceil()) as u32;
+        let tex_num_rows = state.config.height;
+        let tex_num_bytes = tex_bytes_per_row * tex_num_rows;
+
+        let normals_buffer = state.oidn_device.allocate_shared_buffers(tex_num_bytes as u64).unwrap();
+        let albedo_buffer = state.oidn_device.allocate_shared_buffers(tex_num_bytes as u64).unwrap();
+
+        self.normal_buffer = normals_buffer.into();
+        self.albedo_buffer = albedo_buffer.into();
+
+        self.create_static_bind_groups(state, scene);
     }
 }

@@ -139,7 +139,14 @@ fn send_ray_to_light(ro_i: vec3<f32>, rd_i: vec3<f32>, intersection: RayIntersec
     return sr;
 }
 
-fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -> vec4<f32> {
+struct RayColorResult {
+    color: vec3<f32>,
+    first_t: f32,
+    first_normal: vec3<f32>,
+    first_albedo: vec3<f32>,
+}
+
+fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -> RayColorResult {
     var curr_ro = ro;
     var curr_rd = rd;
 
@@ -147,7 +154,7 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
 
     var color_mask = vec3<f32>(1.0, 1.0, 1.0);
     var accumulated_color = vec3<f32>(0.0, 0.0, 0.0);
-    var first_t: f32 = 0.0;
+    var res = RayColorResult();
 
     for (var i = 0u; i <= MAX_BOUNCES; i++) {
         termination_depth += 1u;
@@ -155,10 +162,6 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
         let intersection: RayIntersectionCustom = trace_ray(curr_ro, curr_rd, acc_struct);
 
         if intersection.ri.kind != RAY_QUERY_INTERSECTION_NONE {
-            if i == 0u {
-                first_t = intersection.ri.t;
-            }
-
             var scattered: ScatteredRay;
             var importance: Fraction;
             var sent_to_light = false;
@@ -187,6 +190,8 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
                 }
             }
 
+            let prev_rd = curr_rd;
+
             curr_ro = scattered.origin;
             curr_rd = scattered.direction;
 
@@ -200,6 +205,23 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
                 break;
             }
 
+            if i == 0u {
+                res.first_t = intersection.ri.t;
+    
+                let tangent = normalize(cross(scattered.normal, -prev_rd));
+                let bitangent = normalize(cross(scattered.normal, tangent));
+
+                // Normal Mapping
+                res.first_normal = normalize(
+                    tangent * material.tangent_space_normal.x 
+                    + bitangent * material.tangent_space_normal.y 
+                    + scattered.normal * material.tangent_space_normal.z
+                );
+
+                //res.first_normal = scattered.normal;
+                res.first_albedo = material.albedo;
+            }
+    
             //return vec4<f32>(scattered.attenuation, 1.0);
             //return vec4<f32>(curr_rd, 1.0);
             //return vec4<f32>(scattered.normal, 1.0);
@@ -210,7 +232,9 @@ fn ray_color(ro: vec3<f32>, rd: vec3<f32>, acc_struct: acceleration_structure) -
         }
     }
 
-    return vec4<f32>(accumulated_color, first_t);
+    res.color = accumulated_color;
+
+    return res;
 }
 
 fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure) -> vec4<f32> {
@@ -226,14 +250,27 @@ fn pixel_color(xy: vec2<u32>, acc_struct: acceleration_structure) -> vec4<f32> {
     );
 
     var color = vec4<f32>(0.0, 0.0, 0.0, 1.0);
+
+    var first_t: f32 = 0.0;
+    var first_normal: vec3<f32> = vec3<f32>(0.0, 0.0, 0.0);
+    var first_albedo: vec3<f32> = vec3<f32>(0.0, 0.0, 0.0);
     
     for (var i = 0u; i < SAMPLES_PER_PIXEL; i++) {
-        color += ray_color(ro, rd, acc_struct);
+        let res = ray_color(ro, rd, acc_struct);
+
+        color += vec4<f32>(res.color, 1.0);
+
+        first_t = res.first_t;
+        first_normal = res.first_normal;
+        first_albedo = res.first_albedo;
     }
 
     color /= f32(SAMPLES_PER_PIXEL);
 
-    textureStore(depth_output, xy, vec4<f32>(color.a, 0.0, 0.0, 1.0));
+    textureStore(depth_output, xy, vec4<f32>(first_t, 0.0, 0.0, 1.0));
+
+    normals_output[xy.y * uniforms.camera.width + xy.x] = vec4<f32>(first_normal, 1.0);
+    albedo_output[xy.y * uniforms.camera.width + xy.x] = vec4<f32>(first_albedo, 1.0);
 
     color.w = 1.0;
     

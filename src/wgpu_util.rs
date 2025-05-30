@@ -48,7 +48,8 @@ impl<'a> WGPUState<'a>{
 
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN, 
-            flags: wgpu::InstanceFlags::empty(),//wgpu::InstanceFlags::VALIDATION | wgpu::InstanceFlags::GPU_BASED_VALIDATION,
+            flags: wgpu::InstanceFlags::empty(),
+            //flags: wgpu::InstanceFlags::VALIDATION | wgpu::InstanceFlags::GPU_BASED_VALIDATION,
             ..Default::default()
         });
 

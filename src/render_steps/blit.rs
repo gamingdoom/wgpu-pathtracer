@@ -119,6 +119,10 @@ impl RenderStep for BlitStep {
     }
 
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        
+    }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
         let blit_bgl = BlitStep::get_bgl(&state.device);
 
         let storage_tex: wgpu::Texture = state.device.create_texture(&wgpu::TextureDescriptor {

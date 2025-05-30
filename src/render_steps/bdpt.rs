@@ -520,4 +520,8 @@ impl RenderStep for BDPTStep {
             );
         }
     }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        
+    }
 }

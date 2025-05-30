@@ -269,4 +269,48 @@ impl RenderStep for RayprojectStep {
         //     },
         // );
     }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        let latest_real_frame_desc = &wgpu::TextureDescriptor {
+            label: Some("prev_frame"),
+            size: wgpu::Extent3d {
+                width: state.config.width,
+                height: state.config.height,
+                depth_or_array_layers: 1,
+            },
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba32Float,
+            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
+            view_formats: &[],
+        };
+
+        self.latest_real_frame = state.device.create_texture(latest_real_frame_desc);
+
+        state.latest_real_frame_rt = Some(unsafe { state.rt_device.create_texture_from_hal::<Vulkan>(
+                        state.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
+                            self.latest_real_frame.as_hal::<Vulkan, _, _>(|tex| {
+                                tex.unwrap().raw_handle()
+                            }), 
+                            &wgpu::hal::TextureDescriptor {
+                                label: Some("prev_frame"),
+                                size: wgpu::Extent3d {
+                                    width: state.config.width,
+                                    height: state.config.height,
+                                    depth_or_array_layers: 1,
+                                },
+                                mip_level_count: 1,
+                                sample_count: 1,
+                                dimension: wgpu::TextureDimension::D2,
+                                format: wgpu::TextureFormat::Rgba32Float,
+                                view_formats: (&[]).to_vec(),
+                                usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST | wgpu::TextureUses::COPY_SRC,
+                                memory_flags: wgpu::hal::MemoryFlags::empty()
+                            }, 
+                            Some(Box::new(|| {}))
+                        )),
+                        latest_real_frame_desc
+        ) });
+    }
 }

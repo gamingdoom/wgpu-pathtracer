@@ -13,8 +13,8 @@ pub const USE_DENOISER: bool = true;
 
 pub const USE_PATHTRACER: bool = true;
 // PT settings
-pub const MAX_BOUNCES: u32 = 3;
-pub const SAMPLES_PER_PIXEL: u32 = 2;
+pub const MAX_BOUNCES: u32 = 4;
+pub const SAMPLES_PER_PIXEL: u32 = 1;
 
 pub const SEND_TO_LIGHT_PROBABILITY: f32 = 0.0;
 
