@@ -1,0 +1,13 @@
+cargo-features = ["profile-rustflags"]
+
+[package]
+name = "image_dds-dynamic"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+image_dds = "0.7.2"
+
+[lib]
+crate-type = ["dylib"]
+

@@ -17,6 +17,9 @@
                 "filter": {
                     "name": "wgpu-pathtracer",
                     "kind": "bin"
+                },
+                "env": {
+                    "OIDN_DIR": ""
                 }
             },
             "args": [],
@@ -36,6 +39,9 @@
                 "filter": {
                     "name": "wgpu-pathtracer",
                     "kind": "bin"
+                },
+                "env": {
+                    "OIDN_DIR": ""
                 }
             },
             "args": [],

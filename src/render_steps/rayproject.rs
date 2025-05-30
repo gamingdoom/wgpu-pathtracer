@@ -18,7 +18,7 @@ pub struct RayprojectStep {
     bind_groups: Vec<wgpu::BindGroup>,
 
     pub latest_real_frame: wgpu::Texture,
-    pub latest_real_frame_rt: wgpu::Texture,
+    //pub latest_real_frame_rt: wgpu::Texture,
 
     time_of_last_rayproject: std::time::Instant,
 
@@ -80,7 +80,7 @@ impl RenderStep for RayprojectStep {
 
         let shader = state.device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/rayproject.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/rayproject/rayproject.wgsl").into()),
         });
 
         let pipeline_layout = state.device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -109,7 +109,7 @@ impl RenderStep for RayprojectStep {
             sample_count: 1,
             dimension: wgpu::TextureDimension::D2,
             format: wgpu::TextureFormat::Rgba32Float,
-            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
             view_formats: &[],
         };
 
@@ -142,6 +142,8 @@ impl RenderStep for RayprojectStep {
             latest_real_frame_desc
         ) };
 
+        state.latest_real_frame_rt = Some(latest_real_frame_rt);
+
         // let mut encoder = state.device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Init Encoder") });
         // encoder.clear_texture(&latest_real_frame, &ImageSubresourceRange {
         //     ..Default::default()
@@ -153,7 +155,7 @@ impl RenderStep for RayprojectStep {
             pipeline,
             bind_groups: Vec::new(),
             latest_real_frame,
-            latest_real_frame_rt,
+            //latest_real_frame_rt,
             time_of_last_rayproject: std::time::Instant::now(),
         }
     }
@@ -230,7 +232,11 @@ impl RenderStep for RayprojectStep {
                     render_pass.set_bind_group(i as u32, Some(bind_group), &[]);
                 }
     
-                render_pass.dispatch_workgroups(state.config.width / shader_definitions::WORKGROUP_DIM, state.config.height / shader_definitions::WORKGROUP_DIM, 1);
+                render_pass.dispatch_workgroups(
+                    ((state.config.width as f32) / (shader_definitions::WORKGROUP_DIM as f32)).ceil() as u32, 
+                    ((state.config.height as f32) / (shader_definitions::WORKGROUP_DIM as f32)).ceil() as u32, 
+                    1
+                );
                 
                 //println!("reprojected");
             }
@@ -262,5 +268,49 @@ impl RenderStep for RayprojectStep {
         //         depth_or_array_layers: 1,
         //     },
         // );
+    }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        let latest_real_frame_desc = &wgpu::TextureDescriptor {
+            label: Some("prev_frame"),
+            size: wgpu::Extent3d {
+                width: state.config.width,
+                height: state.config.height,
+                depth_or_array_layers: 1,
+            },
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba32Float,
+            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
+            view_formats: &[],
+        };
+
+        self.latest_real_frame = state.device.create_texture(latest_real_frame_desc);
+
+        state.latest_real_frame_rt = Some(unsafe { state.rt_device.create_texture_from_hal::<Vulkan>(
+                        state.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
+                            self.latest_real_frame.as_hal::<Vulkan, _, _>(|tex| {
+                                tex.unwrap().raw_handle()
+                            }), 
+                            &wgpu::hal::TextureDescriptor {
+                                label: Some("prev_frame"),
+                                size: wgpu::Extent3d {
+                                    width: state.config.width,
+                                    height: state.config.height,
+                                    depth_or_array_layers: 1,
+                                },
+                                mip_level_count: 1,
+                                sample_count: 1,
+                                dimension: wgpu::TextureDimension::D2,
+                                format: wgpu::TextureFormat::Rgba32Float,
+                                view_formats: (&[]).to_vec(),
+                                usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST | wgpu::TextureUses::COPY_SRC,
+                                memory_flags: wgpu::hal::MemoryFlags::empty()
+                            }, 
+                            Some(Box::new(|| {}))
+                        )),
+                        latest_real_frame_desc
+        ) });
     }
 }

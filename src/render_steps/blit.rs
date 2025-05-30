@@ -60,7 +60,7 @@ impl RenderStep for BlitStep {
 
         let blit_shader = state.device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/blit.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(wgsl_preprocessor::preprocess_wgsl!("shaders/blit/blit.wgsl").into()),
         });
 
         let blit_pipeline_layout = state.device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -119,6 +119,10 @@ impl RenderStep for BlitStep {
     }
 
     fn update(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
+        
+    }
+
+    fn resize(&mut self, state: &mut wgpu_util::WGPUState, scene: &scene::Scene) {
         let blit_bgl = BlitStep::get_bgl(&state.device);
 
         let storage_tex: wgpu::Texture = state.device.create_texture(&wgpu::TextureDescriptor {

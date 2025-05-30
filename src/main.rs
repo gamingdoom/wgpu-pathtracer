@@ -1,3 +1,5 @@
+extern crate image_dds;
+extern crate oidn_wgpu_interop;
 
 mod wgpu_util;
 mod wgpu_buffer;

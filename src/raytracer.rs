@@ -1,4 +1,5 @@
 use std::iter;
+use std::sync::Arc;
 
 use glam::{Mat4, Vec3};
 use sdl3::event::Event;
@@ -17,6 +18,7 @@ use ash::vk;
 use crate::camera;
 use crate::render_steps;
 use crate::render_steps::RenderStep;
+use crate::shader;
 use crate::texture;
 use crate::wgpu_util;
 use crate::scene;
@@ -27,9 +29,11 @@ pub struct Raytracer<'a> {
     //pub window_cursor_grabbed: bool,
     pub scene: scene::Scene,
 
-    pub rt_render_step: render_steps::RTStep,
+    pub rt_render_step: Option<render_steps::RTStep>,
+    pub bdpt_render_step: Option<render_steps::BDPTStep>,
     pub rayproject_render_step: render_steps::RayprojectStep,
     pub blit_render_step: render_steps::BlitStep,
+    pub denoise_render_step: render_steps::DenoiseStep,
     pub raytracer_submission_index: Option<wgpu::SubmissionIndex>,
 
     time_since_last_frame: std::time::Instant,
@@ -45,7 +49,7 @@ impl<'a> Raytracer<'a> {
 
         let mut scene = scene::Scene::new(&wgpu_state, camera);
 
-        scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
+        //scene.load_obj(&wgpu_state, "res/classroom/classroom.obj");
         //scene.load_obj(&wgpu_state, "res/minecraft/minecraft.obj");
         //scene.load_obj(&wgpu_state, "res/sports_car/sportsCar.obj");
         //scene.load_obj(&wgpu_state, "res/salle_de_bain/salle_de_bain.obj");
@@ -55,27 +59,57 @@ impl<'a> Raytracer<'a> {
         //scene.load_obj(&wgpu_state, "res/san_miguel/san-miguel.obj");
         //scene.load_obj(&wgpu_state, "res/bedroom/iscv2.obj");
         //scene.load_obj(&wgpu_state, "res/subway/subway.obj");
-        //scene.load_obj(&wgpu_state, "res/bistro/bistro.obj");
+        scene.load_obj(&wgpu_state, "res/bistro/bistro.obj");
         //scene.load_obj(&wgpu_state, "res/glass_cube.obj");
+        //scene.load_obj(&wgpu_state, "res/transmission_test/transmission_test.obj");
+        //scene.load_obj(&wgpu_state, "res/dragon.obj");
+        //scene.load_obj(&wgpu_state, "res/knob/mitsuba.obj");
+        //scene.load_obj(&wgpu_state, "res/normal_mapping/normal_mapping.obj");
+        //scene.load_obj(&wgpu_state, "res/window_room/window_room.obj");
 
         //let (render_pipeline, blases) = scene.create_resources(&wgpu_state.device, &wgpu_state.queue);
 
         //scene.blases = blases;
 
-        let mut rt_step = render_steps::RTStep::create(&mut wgpu_state, &scene);
+        println!("Loaded {} meshes, {} textures", scene.meshes.len(), scene.textures.len());
+
+        
+        let mut rt_step = None;
+        let mut bdpt_step = None; 
+                
         let rayproject_step = render_steps::RayprojectStep::create(&mut wgpu_state, &scene);
         let blit_step = render_steps::BlitStep::create(&mut wgpu_state, &scene);
+        let mut denoise_step = render_steps::DenoiseStep::create(&mut wgpu_state, &scene);
+        
+        if shader_definitions::USE_PATHTRACER {
+            let mut step = render_steps::RTStep::create(&mut wgpu_state, &scene);
+            step.output_texture_view = denoise_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
+            //step.output_texture_view = wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
+            rt_step = Some(step);
+
+            denoise_step.normal_buffer = Some(rt_step.as_ref().unwrap().normal_buffer.clone());
+            denoise_step.albedo_buffer = Some(rt_step.as_ref().unwrap().albedo_buffer.clone());
+
+        } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
+            let mut step = render_steps::BDPTStep::create(&mut wgpu_state, &scene);
+            //step.output_texture_view = denoise_step.input_tv.clone();
+            bdpt_step = Some(step);
+        }
+
+        //denoise_step.output_texture = Some(rayproject_step.latest_real_frame_rt.to_owned());
 
         //rt_step.set_output_texture(&rayproject_step.latest_real_frame_rt);
-        rt_step.output_texture_view = rayproject_step.latest_real_frame_rt.create_view(&wgpu::TextureViewDescriptor::default());
+        // rt_step.output_texture_view = rayproject_step.latest_real_frame_rt.create_view(&wgpu::TextureViewDescriptor::default());
 
         Self {
             wgpu_state: wgpu_state,
             //window_cursor_grabbed: false,
             scene,
             rt_render_step: rt_step,
+            bdpt_render_step: bdpt_step,
             rayproject_render_step: rayproject_step,
             blit_render_step: blit_step,
+            denoise_render_step: denoise_step,
             raytracer_submission_index: None,
 
             time_since_last_frame: std::time::Instant::now(),
@@ -132,18 +166,26 @@ impl<'a> Raytracer<'a> {
             return Ok(());
         }
 
-        let mut encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("RT Encoder") });
+        if shader_definitions::USE_DENOISER {
+            let mut denoise_encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("Denoise Encoder") });
 
-        // encoder.copy_texture_to_texture(
-        //     &wgpu::TexelCopyTextureInfo {
-        //         texture: &self.
-        //     }
-        // );
+            self.denoise_render_step.render(&mut self.wgpu_state, &self.scene, &mut denoise_encoder, None);
+
+            self.wgpu_state.rt_queue.submit(Some(denoise_encoder.finish()));
+        }
+
+        let mut encoder = self.wgpu_state.rt_device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("RT Encoder") });
 
         self.scene.prev_camera = self.scene.camera;
         self.scene.camera.frame += 1;
-        self.rt_render_step.update(&mut self.wgpu_state, &self.scene);
-        self.rt_render_step.render(&mut self.wgpu_state, &self.scene, &mut encoder, None);
+        if shader_definitions::USE_PATHTRACER{
+            self.rt_render_step.as_mut().unwrap().update(&mut self.wgpu_state, &self.scene);
+            self.rt_render_step.as_mut().unwrap().render(&mut self.wgpu_state, &self.scene, &mut encoder, None);
+        } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
+            self.bdpt_render_step.as_mut().unwrap().update(&mut self.wgpu_state, &self.scene);
+            self.bdpt_render_step.as_mut().unwrap().render(&mut self.wgpu_state, &self.scene, &mut encoder, None);
+        }
+
 
         // let submit_info = vk::SubmitInfo::default()
         //     .command_buffers(&[encoder.finish()]);
@@ -292,43 +334,41 @@ impl<'a> Raytracer<'a> {
                 sample_count: 1,
                 dimension: wgpu::TextureDimension::D2,
                 format: wgpu::TextureFormat::Rgba32Float,
-                usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+                usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST | wgpu::TextureUsages::COPY_SRC,
                 view_formats: &[],
             };
 
-            self.rayproject_render_step.latest_real_frame = self.wgpu_state.device.create_texture(latest_real_frame_desc);
-    
-            self.rayproject_render_step.latest_real_frame_rt = unsafe { self.wgpu_state.rt_device.create_texture_from_hal::<Vulkan>(
-                self.wgpu_state.rt_device.as_hal::<Vulkan, _, _>(|dev| wgpu::hal::vulkan::Device::texture_from_raw(
-                    self.rayproject_render_step.latest_real_frame.as_hal::<Vulkan, _, _>(|tex| {
-                        tex.unwrap().raw_handle()
-                    }), 
-                    &wgpu::hal::TextureDescriptor {
-                        label: Some("prev_frame"),
-                        size: wgpu::Extent3d {
-                            width: self.wgpu_state.config.width,
-                            height: self.wgpu_state.config.height,
-                            depth_or_array_layers: 1,
-                        },
-                        mip_level_count: 1,
-                        sample_count: 1,
-                        dimension: wgpu::TextureDimension::D2,
-                        format: wgpu::TextureFormat::Rgba32Float,
-                        view_formats: (&[]).to_vec(),
-                        usage: wgpu::TextureUses::STORAGE_READ_ONLY | wgpu::TextureUses::COPY_DST,
-                        memory_flags: wgpu::hal::MemoryFlags::empty()
-                    }, 
-                    Some(Box::new(|| {}))
-                )),
-                latest_real_frame_desc
-            ) };
+            self.rayproject_render_step.resize(&mut self.wgpu_state, &self.scene);
 
-            self.rt_render_step.output_texture_view = self.rayproject_render_step.latest_real_frame_rt.create_view(&wgpu::TextureViewDescriptor::default());
+            if shader_definitions::USE_DENOISER {
+                self.denoise_render_step.input_texture = self.wgpu_state.rt_device.create_texture(latest_real_frame_desc);
+            } else {
+                self.denoise_render_step.input_texture = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().clone();
+            }
 
             self.wgpu_state.resize_2();
 
-            self.blit_render_step.update(&mut self.wgpu_state, &self.scene);
-            self.rt_render_step.create_static_bind_groups(&mut self.wgpu_state, &self.scene);
+            if shader_definitions::USE_PATHTRACER {
+                //self.rt_render_step.as_mut().unwrap().output_texture_view = self.wgpu_state.latest_real_frame_rt.as_ref().unwrap().create_view(&wgpu::TextureViewDescriptor::default());
+                self.rt_render_step.as_mut().unwrap().output_texture_view = self.denoise_render_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
+                self.rt_render_step.as_mut().unwrap().resize(&mut self.wgpu_state, &self.scene);
+
+                self.denoise_render_step.normal_buffer = Some(self.rt_render_step.as_ref().unwrap().normal_buffer.clone());
+                self.denoise_render_step.albedo_buffer = Some(self.rt_render_step.as_ref().unwrap().albedo_buffer.clone());
+            } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
+                self.bdpt_render_step.as_mut().unwrap().output_texture_view = self.denoise_render_step.input_texture.create_view(&wgpu::TextureViewDescriptor::default());
+                self.bdpt_render_step.as_mut().unwrap().resize(&mut self.wgpu_state, &self.scene);
+            }
+
+            self.denoise_render_step.resize(&mut self.wgpu_state, &self.scene);
+
+            self.blit_render_step.resize(&mut self.wgpu_state, &self.scene);
+
+            // if shader_definitions::USE_PATHTRACER {
+            //     self.rt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
+            // } else if shader_definitions::USE_BIDIRECTIONAL_PATHTRACER {
+            //     self.bdpt_render_step.as_mut().unwrap().create_static_bind_groups(&mut self.wgpu_state, &self.scene);
+            // }
 
             // self.wgpu_state.size = size;
             // self.wgpu_state.config.width = size.width;
