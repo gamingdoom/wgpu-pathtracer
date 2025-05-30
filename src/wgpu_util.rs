@@ -48,7 +48,7 @@ impl<'a> WGPUState<'a>{
 
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN, 
-            flags: wgpu::InstanceFlags::empty(),
+            flags: wgpu::InstanceFlags::ALLOW_UNDERLYING_NONCOMPLIANT_ADAPTER,
             //flags: wgpu::InstanceFlags::VALIDATION | wgpu::InstanceFlags::GPU_BASED_VALIDATION,
             ..Default::default()
         });
@@ -96,16 +96,20 @@ impl<'a> WGPUState<'a>{
         // Get queue families
         let queue_fam_props = unsafe { vk_instance.get_physical_device_queue_family_properties(vk_physdev) };
 
-        let mut family_idx: usize = 0;
+        let mut family_idx: Option<usize> = None;
         for (i, queue_family) in queue_fam_props.iter().enumerate() {
-            if queue_family.queue_flags.contains(vk::QueueFlags::COMPUTE | vk::QueueFlags::GRAPHICS) {
-                println!("Found queue family at index {}", i);
-                family_idx = i;
+            if queue_family.queue_flags.contains(vk::QueueFlags::COMPUTE | vk::QueueFlags::GRAPHICS) && queue_family.queue_count >= 2 {
+                println!("Found queue family at index {}, {} queue(s)", i, queue_family.queue_count);
+                family_idx = Some(i);
             }
         }
 
+        if family_idx.is_none() {
+            panic!("Failed to find compatible queue family! Your GPU/GPU Driver isn't supported.");
+        }
+
         let mut queue_create_info = vk::DeviceQueueCreateInfo::default()
-            .queue_family_index(family_idx as u32)
+            .queue_family_index(family_idx.unwrap() as u32)
             .queue_priorities(&[1.0f32, 0.0f32]);
         queue_create_info.queue_count = 2;
 
@@ -140,7 +144,7 @@ impl<'a> WGPUState<'a>{
                     &extensions,
                     features,
                     &wgpu::MemoryHints::Performance,
-                    family_idx as u32,
+                    family_idx.unwrap() as u32,
                     1
                 )
             })
@@ -154,7 +158,7 @@ impl<'a> WGPUState<'a>{
                     &extensions,
                     features,
                     &wgpu::MemoryHints::Performance,
-                    family_idx as u32,
+                    family_idx.unwrap() as u32,
                     0
                 )
             })
